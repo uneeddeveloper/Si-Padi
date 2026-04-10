@@ -17,9 +17,8 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        // Redirect jika sudah login
         if (Auth::check()) {
-            return redirect()->intended($this->redirectPath());
+            return redirect()->intended($this->redirectPath(Auth::user()->role));
         }
 
         return view('content-auth.content-login');
@@ -41,7 +40,7 @@ class LoginController extends Controller
             'password.min' => 'Kata sandi minimal 6 karakter.',
         ]);
 
-        // 2. Cek rate limiting (max 5 percobaan per menit)
+        // 2. Cek rate limiting
         $this->ensureIsNotRateLimited($request);
 
         // 3. Coba autentikasi
@@ -56,10 +55,10 @@ class LoginController extends Controller
             ]);
         }
 
-        // 4. Reset rate limiter setelah berhasil login
+        // 4. Reset rate limiter
         RateLimiter::clear($this->throttleKey($request));
 
-        // 5. Cek status akun (kolom is_active)
+        // 5. Cek status akun
         $user = Auth::user();
 
         if (!$user->is_active) {
@@ -72,10 +71,10 @@ class LoginController extends Controller
             ]);
         }
 
-        // 6. Regenerate session untuk keamanan (hindari session fixation)
+        // 6. Regenerate session
         $request->session()->regenerate();
 
-        // 7. Redirect berdasarkan role
+        // 7. Redirect berdasarkan role (Sudah diperbarui ke superadmin & admin)
         return redirect()->intended($this->redirectPath($user->role));
     }
 
@@ -85,7 +84,6 @@ class LoginController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -94,20 +92,19 @@ class LoginController extends Controller
 
     /**
      * Tentukan halaman redirect berdasarkan role.
+     * PERUBAHAN: admin & user -> superadmin & admin
      */
     protected function redirectPath(?string $role = null): string
     {
         return match ($role) {
+            'superadmin' => route('superadmin.dashboard'),
             'admin' => route('admin.dashboard'),
-            'user' => route('user.dashboard'),
             default => route('dashboard'),
         };
     }
 
     /**
      * Pastikan request belum melebihi batas percobaan login.
-     *
-     * @throws ValidationException
      */
     protected function ensureIsNotRateLimited(Request $request): void
     {

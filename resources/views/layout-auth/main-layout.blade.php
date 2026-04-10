@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Sistem Pengaduan Warga') Si-Padi</title>
+    <title>@yield('title', 'Sistem Pengaduan Warga') Si-padi</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,8 +109,8 @@
                     </svg>
                 </div>
                 <div>
-                    {{-- Si-Padi name --}}
-                    <div class="font-extrabold text-xl text-white tracking-tight">Si-Padi</div>
+                    {{-- Si-Padu name --}}
+                    <div class="font-extrabold text-xl text-white tracking-tight">Si-padi</div>
                     <div class="text-white/60 text-xs mt-0.5">Sistem Informasi Pengaduan Masyarakat Desa</div>
                 </div>
             </div>
