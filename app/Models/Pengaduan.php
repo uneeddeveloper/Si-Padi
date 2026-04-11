@@ -14,6 +14,8 @@ class Pengaduan extends Model
         'rt_rw',
         'urgensi',
         'judul',
+        'status',
+        'komentar_petugas',
         'deskripsi',
     ];
 
@@ -21,4 +23,9 @@ class Pengaduan extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

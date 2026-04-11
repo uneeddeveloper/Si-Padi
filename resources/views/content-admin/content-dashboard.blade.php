@@ -15,7 +15,7 @@
     $pengaduanSelesai = \App\Models\Pengaduan::where('status', 'selesai')->count();
     $totalUser = \App\Models\User::where('role', 'user')->count();
 
-    $recentPengaduan = \App\Models\Pengaduan::with(['user', 'kategori'])->latest()->take(6)->get();
+    $recentPengaduan = \App\Models\Pengaduan::with('user')->latest()->take(6)->get();
                     @endphp
 
                     {{-- Welcome Banner --}}

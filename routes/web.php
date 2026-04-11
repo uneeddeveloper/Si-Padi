@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BerandaAdminController;
+use App\Http\Controllers\Admin\PengaduanAdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Beranda\berandaUserController;
 use App\Http\Controllers\Beranda\RiwayatController;
@@ -21,6 +22,24 @@ Route::middleware('guest')->group(function () {
 Route::get('/dashboard', [BerandaAdminController::class, 'index'])
     ->middleware('auth')
     ->name('superadmin.dashboard');
+
+Route::get('/admin/pengaduan', [PengaduanAdminController::class, 'index'])
+    ->middleware('auth')
+    ->name('admin.pengaduan');
+
+Route::get('/admin/pengaduan/{id}', [PengaduanAdminController::class, 'show'])
+    ->middleware('auth')
+    ->name('admin.pengaduan.show');
+
+
+// Pastikan menggunakan ->patch sesuai dengan @method('PATCH') di view
+Route::patch('/pengaduan/{id}/update-status', [PengaduanAdminController::class, 'updateStatus'])
+    ->middleware('auth')
+    ->name('admin.pengaduan.updateStatus');
+
+Route::post('/admin/pengaduan/{id}/destroy', [PengaduanAdminController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('admin.pengaduan.destroy');
 
 Route::post('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
