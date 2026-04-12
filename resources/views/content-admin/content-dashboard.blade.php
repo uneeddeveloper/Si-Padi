@@ -10,16 +10,16 @@
     $isSuperAdmin = $authRole === 'superadmin';
 
     $totalPengaduan = \App\Models\Pengaduan::count();
-    $pengaduanMasuk = \App\Models\Pengaduan::where('status', 'masuk')->count();
-    $pengaduanProses = \App\Models\Pengaduan::where('status', 'proses')->count();
-    $pengaduanSelesai = \App\Models\Pengaduan::where('status', 'selesai')->count();
-    $totalUser = \App\Models\User::where('role', 'user')->count();
+    $pengaduanMasuk = \App\Models\Pengaduan::where('status', 'Menunggu')->count();
+    $pengaduanProses = \App\Models\Pengaduan::where('status', 'Diproses')->count();
+    $pengaduanSelesai = \App\Models\Pengaduan::where('status', 'Selesai')->count();
+    $totalUser = \App\Models\User::count();
 
     $recentPengaduan = \App\Models\Pengaduan::with('user')->latest()->take(6)->get();
                     @endphp
 
                     {{-- Welcome Banner --}}
-                    <div class="relative overflow-hidden rounded-radius p-8 mb-6 text-white bg-gradient-to-br {{ $isSuperAdmin ? 'from-[#4c1d95] via-[#6d28d9] to-[#7c3aed]' : 'from-[#134f2d] via-[#1a6b3c] to-[#2d9b5a]' }}">
+                    <div class="relative overflow-hidden rounded-radius p-8 mb-6 text-white bg-gradient-to-br {{ $isSuperAdmin ? 'from-[#0f1f5c] via-[#1240a8] to-[#1a56db]' : 'from-[#0f1f5c] via-[#1240a8] to-[#2d7af0]' }}">
                         <div class="relative z-10">
                             <div class="text-xs text-white/60 mb-1">{{ now()->locale('id')->isoFormat('dddd, D MMMM Y') }}</div>
                             <h2 class="font-grotesk text-2xl font-bold mb-1">
@@ -29,8 +29,7 @@
                                 {{ $isSuperAdmin ? 'Anda memiliki kendali penuh atas sistem informasi pengaduan masyarakat SI PADI.' : 'Pantau dan kelola pengaduan masyarakat dari dashboard administrator.' }}
                             </p>
                             <div class="flex gap-3">
-                                <a href="" class="px-4 py-2 bg-white/20 hover:bg-white/30 border border-white/20 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
-                                    {{-- {{ route('admin.pengaduan.index') }} --}}
+                                <a href="{{ route('admin.pengaduan.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 border border-white/20 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
                                     <i class="bi bi-megaphone"></i> Lihat Pengaduan
                                 </a>
                             </div>
@@ -95,8 +94,7 @@
                                 <h3 class="font-bold text-sm text-gray-700 flex items-center gap-2">
                                     <i class="bi bi-list-ul text-primary"></i> Pengaduan Terbaru
                                 </h3>
-                                <a href="" class="text-[11px] font-bold text-primary hover:underline">Lihat Semua</a>
-                                {{-- {{ route('admin.pengaduan.index') }} --}}
+                                <a href="{{ route('admin.pengaduan.index') }}" class="text-[11px] font-bold text-primary hover:underline">Lihat Semua</a>
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left border-collapse text-xs">
@@ -123,8 +121,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="px-6 py-4 text-center">
-                                                    <a href="" class="w-7 h-7 inline-flex items-center justify-center border border-gray-200 rounded-md hover:bg-white transition-all text-gray-400 hover:text-primary">
-                                                        {{-- {{ route('admin.pengaduan.show', $item->id) }} --}}
+                                                    <a href="{{ route('admin.pengaduan.show', $item->id) }}" class="w-7 h-7 inline-flex items-center justify-center border border-gray-200 rounded-md hover:bg-white transition-all text-gray-400 hover:text-primary">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
                                                 </td>
@@ -174,8 +171,7 @@
                                     <span class="text-xs font-grotesk font-bold text-primary">{{ number_format($totalUser) }} Akun</span>
                                  </div>
                                  <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Total masyarakat yang telah terdaftar di sistem SI PADI untuk menyampaikan aspirasi.</p>
-                                 <a href="" class="block text-center py-2 bg-bg-base text-primary text-[11px] font-bold rounded-lg hover:bg-primary-light transition-all">Kelola Pengguna</a>
-                                 {{-- {{ route('admin.users.index') }} --}}
+                                 <a href="{{ route('admin.users.index') }}" class="block text-center py-2 bg-bg-base text-primary text-[11px] font-bold rounded-lg hover:bg-primary-light transition-all">Kelola Pengguna</a>
                             </div>
                         </div>
 

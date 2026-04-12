@@ -17,6 +17,10 @@ class Pengaduan extends Model
         'status',
         'komentar_petugas',
         'deskripsi',
+        'foto',
+        'latitude',
+        'longitude',
+        'alamat_koordinat',
     ];
 
     protected $casts = [

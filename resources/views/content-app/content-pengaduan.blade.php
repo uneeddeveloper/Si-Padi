@@ -50,16 +50,33 @@
             </div>
 
             @if(session('tiket_baru'))
-            <div class="bg-brand-50 border border-brand-200 rounded-2xl p-5 mb-6 flex items-start gap-4">
-                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                </div>
-                <div>
-                    <p class="font-bold text-brand-800 text-sm">Pengaduan berhasil dikirim!</p>
-                    <p class="text-brand-600 text-sm mt-0.5">Nomor tiket Anda: <strong class="font-extrabold text-brand-700">{{ session('tiket_baru') }}</strong></p>
-                    <p class="text-brand-500 text-xs mt-1">Simpan nomor tiket ini untuk melacak status pengaduan Anda.</p>
-                </div>
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pengaduan Berhasil Dikirim!',
+                        html: `
+                            <p class="text-sm text-gray-600 mb-3">Laporan Anda telah kami terima dan akan segera ditindaklanjuti.</p>
+                            <div style="background:#eef3ff;border:1px solid #c1d0fb;border-radius:12px;padding:14px 18px;display:inline-block;margin-top:4px">
+                                <div style="font-size:11px;color:#4160ed;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Nomor Tiket Anda</div>
+                                <div style="font-size:22px;font-weight:800;color:#1240a8;font-family:monospace;letter-spacing:2px">{{ session('tiket_baru') }}</div>
+                            </div>
+                            <p style="font-size:12px;color:#9ca3af;margin-top:14px">Simpan nomor tiket ini untuk melacak status pengaduan.</p>
+                        `,
+                        confirmButtonText: 'Lacak Pengaduan',
+                        showCancelButton: true,
+                        cancelButtonText: 'Tutup',
+                        confirmButtonColor: '#1a56db',
+                        cancelButtonColor: '#6b7280',
+                        allowOutsideClick: false,
+                        customClass: { popup: 'rounded-2xl' },
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            window.location.href = '{{ route("pengaduan.lacak") }}?tiket={{ session("tiket_baru") }}';
+                        }
+                    });
+                });
+            </script>
             @endif
 
             <form method="POST" action="{{ route('pengaduan.store') }}" enctype="multipart/form-data" class="space-y-5">
@@ -202,6 +219,50 @@
                     @error('foto') <p class="text-red-500 text-xs mt-1.5">{{ $message }}</p> @enderror
                 </div>
 
+                {{-- Titik Koordinat Lokasi --}}
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Titik Lokasi Kejadian
+                        <span class="text-slate-400 font-normal">(Opsional — bantu petugas menemukan lokasi)</span>
+                    </label>
+
+                    {{-- Tombol deteksi GPS --}}
+                    <button type="button" id="btn-lokasi"
+                        onclick="deteksiLokasi()"
+                        class="mb-3 inline-flex items-center gap-2 px-4 py-2.5 bg-brand-50 border border-brand-200 text-brand-700 rounded-xl text-sm font-semibold hover:bg-brand-100 transition-all">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span id="btn-lokasi-text">Gunakan Lokasi Saya (GPS)</span>
+                    </button>
+
+                    {{-- Status lokasi --}}
+                    <div id="lokasi-status" class="hidden mb-3 px-3 py-2 rounded-xl text-xs font-semibold"></div>
+
+                    {{-- Peta Leaflet --}}
+                    <div id="map-wrapper" class="hidden rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+                        <div id="map-picker" class="w-full h-56"></div>
+                        <div class="px-4 py-2.5 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5 text-brand-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Geser atau klik peta untuk menyesuaikan titik lokasi
+                        </div>
+                    </div>
+
+                    {{-- Alamat hasil reverse geocode --}}
+                    <div id="alamat-wrapper" class="hidden mt-2">
+                        <input type="text" id="alamat-display" readonly
+                            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 cursor-default">
+                    </div>
+
+                    {{-- Hidden fields yang dikirim ke server --}}
+                    <input type="hidden" name="latitude"         id="input-lat">
+                    <input type="hidden" name="longitude"        id="input-lng">
+                    <input type="hidden" name="alamat_koordinat" id="input-alamat">
+                </div>
+
                 {{-- Submit --}}
                 <button type="submit"
                     class="w-full h-12 flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl
@@ -273,13 +334,12 @@
                     <h3 class="font-bold text-slate-800 mb-5 text-sm">Progress Penanganan</h3>
                     @php
                         $steps = [
-                            ['key' => 'diterima', 'label' => 'Diterima', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
-                            ['key' => 'diverifikasi', 'label' => 'Diverifikasi', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
-                            ['key' => 'diproses', 'label' => 'Diproses', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z'],
-                            ['key' => 'selesai', 'label' => 'Selesai', 'icon' => 'M5 13l4 4L19 7'],
+                            ['key' => 'Menunggu', 'label' => 'Diterima', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
+                            ['key' => 'Diproses', 'label' => 'Diproses', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z'],
+                            ['key' => 'Selesai', 'label' => 'Selesai', 'icon' => 'M5 13l4 4L19 7'],
                         ];
-                        $currentStep = $pengaduan->status ?? 'diterima';
-                        $stepOrder = ['diterima' => 0, 'diverifikasi' => 1, 'diproses' => 2, 'selesai' => 3];
+                        $currentStep = $pengaduan->status ?? 'Menunggu';
+                        $stepOrder = ['Menunggu' => 0, 'Diproses' => 1, 'Selesai' => 2, 'Ditolak' => 2];
                         $currentIdx = $stepOrder[$currentStep] ?? 0;
                     @endphp
                     <div class="tl-track space-y-4">
@@ -315,18 +375,18 @@
                 </div>
 
                 {{-- Balasan petugas --}}
-                @if($pengaduan->balasan)
+                @if($pengaduan->komentar_petugas)
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center">
                             <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-700">Balasan Resmi Petugas</p>
-                            <p class="text-[10px] text-slate-400">{{ $pengaduan->balasan_at?->format('d M Y, H:i') }}</p>
+                            <p class="text-xs font-bold text-slate-700">Catatan / Balasan Petugas</p>
+                            <p class="text-[10px] text-slate-400">{{ $pengaduan->updated_at->format('d M Y, H:i') }}</p>
                         </div>
                     </div>
-                    <p class="text-sm text-slate-700 leading-relaxed">{{ $pengaduan->balasan }}</p>
+                    <p class="text-sm text-slate-700 leading-relaxed">{{ $pengaduan->komentar_petugas }}</p>
                 </div>
                 @endif
 
@@ -364,7 +424,125 @@
 </section>
 @endsection
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"/>
+@endpush
+
 @push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        /* ─── PETA LOKASI ─── */
+        let map, marker;
+
+        function initMap(lat, lng) {
+            const wrapper = document.getElementById('map-wrapper');
+            wrapper.classList.remove('hidden');
+
+            if (!map) {
+                map = L.map('map-picker').setView([lat, lng], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+
+                marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+
+                marker.on('dragend', function (e) {
+                    const pos = e.target.getLatLng();
+                    updateKoordinat(pos.lat, pos.lng);
+                    reverseGeocode(pos.lat, pos.lng);
+                });
+
+                map.on('click', function (e) {
+                    marker.setLatLng(e.latlng);
+                    updateKoordinat(e.latlng.lat, e.latlng.lng);
+                    reverseGeocode(e.latlng.lat, e.latlng.lng);
+                });
+            } else {
+                map.setView([lat, lng], 16);
+                marker.setLatLng([lat, lng]);
+            }
+
+            updateKoordinat(lat, lng);
+            reverseGeocode(lat, lng);
+            // Paksa Leaflet re-render ukuran peta setelah wrapper tampil
+            setTimeout(() => map.invalidateSize(), 100);
+        }
+
+        function updateKoordinat(lat, lng) {
+            document.getElementById('input-lat').value = lat;
+            document.getElementById('input-lng').value = lng;
+        }
+
+        function reverseGeocode(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                .then(r => r.json())
+                .then(data => {
+                    const alamat = data.display_name || `${lat}, ${lng}`;
+                    document.getElementById('input-alamat').value = alamat;
+                    document.getElementById('alamat-display').value = alamat;
+                    document.getElementById('alamat-wrapper').classList.remove('hidden');
+                })
+                .catch(() => {
+                    const fallback = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    document.getElementById('input-alamat').value = fallback;
+                    document.getElementById('alamat-display').value = fallback;
+                    document.getElementById('alamat-wrapper').classList.remove('hidden');
+                });
+        }
+
+        function deteksiLokasi() {
+            const status = document.getElementById('lokasi-status');
+            const btnText = document.getElementById('btn-lokasi-text');
+
+            if (!navigator.geolocation) {
+                status.textContent = 'Browser tidak mendukung GPS. Klik pada peta untuk menentukan lokasi manual.';
+                status.className = 'mb-3 px-3 py-2 rounded-xl text-xs font-semibold bg-red-50 text-red-600';
+                status.classList.remove('hidden');
+                // Tampilkan peta default (pusat Indonesia)
+                initMap(-2.5, 118.0);
+                return;
+            }
+
+            btnText.textContent = 'Mendeteksi lokasi...';
+            document.getElementById('btn-lokasi').disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                function (pos) {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+
+                    status.textContent = `Lokasi terdeteksi: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+                    status.className = 'mb-3 px-3 py-2 rounded-xl text-xs font-semibold bg-green-50 text-green-700';
+                    status.classList.remove('hidden');
+
+                    btnText.textContent = 'Lokasi Terdeteksi ✓';
+                    document.getElementById('btn-lokasi').classList.replace('bg-brand-50', 'bg-green-50');
+                    document.getElementById('btn-lokasi').classList.replace('border-brand-200', 'border-green-300');
+                    document.getElementById('btn-lokasi').classList.replace('text-brand-700', 'text-green-700');
+
+                    initMap(lat, lng);
+                },
+                function (err) {
+                    let msg = 'Gagal mendapatkan lokasi.';
+                    if (err.code === 1) msg = 'Izin lokasi ditolak. Izinkan akses lokasi di browser, atau tentukan lokasi manual pada peta.';
+                    if (err.code === 2) msg = 'Lokasi tidak tersedia. Coba lagi atau tentukan manual.';
+
+                    status.textContent = msg;
+                    status.className = 'mb-3 px-3 py-2 rounded-xl text-xs font-semibold bg-amber-50 text-amber-700';
+                    status.classList.remove('hidden');
+
+                    btnText.textContent = 'Gunakan Lokasi Saya (GPS)';
+                    document.getElementById('btn-lokasi').disabled = false;
+
+                    // Tampilkan peta agar bisa pilih manual
+                    initMap(-2.5, 118.0);
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+    </script>
     <script>
         function switchTab(tab) {
             const btnForm = document.getElementById('tab-form');

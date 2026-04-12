@@ -61,7 +61,10 @@ class PengaduanController extends Controller
             'urgensi' => ['required', 'in:Rendah,Sedang,Tinggi'],
             'judul' => ['required', 'string', 'max:255'],
             'deskripsi' => ['required', 'string', 'min:20'],
-            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto'             => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'latitude'         => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'        => ['nullable', 'numeric', 'between:-180,180'],
+            'alamat_koordinat' => ['nullable', 'string', 'max:255'],
         ], [
             'kategori.required' => 'Pilih salah satu kategori pengaduan.',
             'kategori.in' => 'Kategori pengaduan tidak valid.',
@@ -95,22 +98,25 @@ class PengaduanController extends Controller
 
             // 2c. Simpan ke database
             return Pengaduan::create([
-                'nomor_tiket' => $nomorTiket,
-                'kategori' => $validated['kategori'],
-                'nama_pelapor' => $validated['nama_pelapor'],
-                'nomor_hp' => $validated['nomor_hp'],
-                'rt_rw' => $validated['rt_rw'],
-                'urgensi' => $validated['urgensi'],
-                'judul' => $validated['judul'],
-                'deskripsi' => $validated['deskripsi'],
-                'foto' => $fotoPath,
-                'status' => 'diterima',
+                'nomor_tiket'      => $nomorTiket,
+                'kategori'         => $validated['kategori'],
+                'nama_pelapor'     => $validated['nama_pelapor'],
+                'nomor_hp'         => $validated['nomor_hp'],
+                'rt_rw'            => $validated['rt_rw'],
+                'urgensi'          => $validated['urgensi'],
+                'judul'            => $validated['judul'],
+                'deskripsi'        => $validated['deskripsi'],
+                'foto'             => $fotoPath,
+                'latitude'         => $validated['latitude'] ?? null,
+                'longitude'        => $validated['longitude'] ?? null,
+                'alamat_koordinat' => $validated['alamat_koordinat'] ?? null,
+                'status'           => 'Menunggu',
             ]);
         });
 
-        // 3. Redirect dengan nomor tiket di session flash
+        // 3. Redirect kembali ke halaman pengaduan agar notif tiket tampil
         return redirect()
-            ->route('beranda')
+            ->route('pengaduan')
             ->with('tiket_baru', $pengaduan->nomor_tiket);
     }
 

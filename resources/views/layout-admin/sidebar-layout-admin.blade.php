@@ -4,7 +4,7 @@
     {{-- Brand --}}
     <div class="p-5 flex items-center gap-3 border-b border-white/10 flex-shrink-0">
         <div
-            class="w-9 h-9 bg-gradient-to-br from-[#2d9b5a] to-primary rounded-xl flex items-center justify-center shadow-lg">
+            class="w-9 h-9 bg-gradient-to-br from-[#2d7af0] to-primary rounded-xl flex items-center justify-center shadow-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5z" />
@@ -22,12 +22,12 @@
     <div class="px-5 py-4 bg-white/5 border-b border-white/5">
         <div class="flex items-center gap-3">
             <div
-                class="w-8 h-8 rounded-full bg-gradient-to-br {{ $authRole === 'superadmin' ? 'from-violet-500 to-indigo-600' : 'from-primary to-green-500' }} flex items-center justify-center text-white font-bold text-[11px]">
+                class="w-8 h-8 rounded-full bg-gradient-to-br {{ $authRole === 'superadmin' ? 'from-violet-500 to-indigo-600' : 'from-primary to-[#2d7af0]' }} flex items-center justify-center text-white font-bold text-[11px]">
                 {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
             </div>
             <div class="min-w-0">
                 <div class="text-xs font-bold text-white truncate">{{ Auth::user()->name }}</div>
-                <div class="text-[10px] mt-0.5 {{ $authRole === 'superadmin' ? 'text-violet-300' : 'text-green-300' }}">
+                <div class="text-[10px] mt-0.5 {{ $authRole === 'superadmin' ? 'text-violet-300' : 'text-blue-300' }}">
                     ● {{ $authRole === 'superadmin' ? 'Super Admin' : 'Administrator' }}
                 </div>
             </div>
@@ -37,27 +37,24 @@
     {{-- Nav --}}
     <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6 sidebar-scroll">
 
-        {{-- Section 1 --}}
+        {{-- Section 1: Menu Utama --}}
         <div>
-            <label class="px-4 text-[10px] font-bold text-white/30 uppercase tracking-[2px] mb-2 block">Menu
-                Utama</label>
+            <label class="px-4 text-[10px] font-bold text-white/30 uppercase tracking-[2px] mb-2 block">Menu Utama</label>
             <div class="space-y-1">
-                <a href="{{ route('superadmin.dashboard') }}"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-grid-1x2"></i> <span>Dashboard</span>
                 </a>
-                <a href=""
-                {{-- {{ route('admin.pengaduan.index') }} --}}
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengaduan.index') ? 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('admin.pengaduan.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengaduan.index') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-megaphone"></i> <span class="flex-1">Semua Pengaduan</span>
-                    @php $cMasuk = \App\Models\Pengaduan::where('status', 'masuk')->count(); @endphp
-                    @if($cMasuk > 0) <span
-                    class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{{ $cMasuk }}</span> @endif
+                    @php $cMasuk = \App\Models\Pengaduan::where('status', 'Menunggu')->count(); @endphp
+                    @if($cMasuk > 0)
+                    <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{{ $cMasuk }}</span>
+                    @endif
                 </a>
-                <a href=""
-                {{-- {{ route('admin.pengaduan.proses') }} --}}
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
-                    {{-- {{ request()->routeIs('admin.pengaduan.proses') ? --}}
+                <a href="{{ route('admin.pengaduan.index', ['status' => 'Diproses']) }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengaduan.index') && request('status') === 'Diproses' ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-arrow-repeat"></i> <span>Sedang Diproses</span>
                 </a>
             </div>
@@ -65,22 +62,18 @@
 
         {{-- Section 2: Management --}}
         <div>
-            <label class="px-4 text-[10px] font-bold text-white/30 uppercase tracking-[2px] mb-2 block">Manajemen
-                Data</label>
+            <label class="px-4 text-[10px] font-bold text-white/30 uppercase tracking-[2px] mb-2 block">Manajemen Data</label>
             <div class="space-y-1">
-                <a href=""
-                {{-- {{ route('admin.users.index') }} --}}
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.users.*') ? 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
-                    <i class="bi bi-people"></i> <span>Masyarakat</span>
+                <a href="{{ route('admin.users.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.users.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                    <i class="bi bi-people"></i> <span>Manajemen Pengguna</span>
                 </a>
-                <a href=""
-                {{-- {{ route('admin.instansi.index') }} --}}
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.instansi.*') ? 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('admin.instansi.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.instansi.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-building"></i> <span>Data Instansi</span>
                 </a>
-                <a href=""
-                {{-- {{ route('admin.kategori.index') }} --}}
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.kategori.*') ? 'bg-primary/20 text-green-400 font-bold border-l-4 border-green-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('admin.kategori.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.kategori.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-tags"></i> <span>Kategori</span>
                 </a>
             </div>
@@ -88,34 +81,26 @@
 
         {{-- Section 3: Super Admin Only --}}
         @if($authRole === 'superadmin')
-            <div>
-                <label class="px-4 text-[10px] font-bold text-violet-400/50 uppercase tracking-[2px] mb-2 block">System
-                    Settings</label>
-                <div class="space-y-1">
-                    <a href=""
-                    {{-- {{ route('admin.log.index') }} --}}
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all text-white/60 hover:bg-white/5 hover:text-white">
-                        <i class="bi bi-clock-history"></i> <span>Log Aktivitas</span>
-                    </a>
-                    <a href=""
-                    {{-- {{ route('admin.backup.index') }} --}}
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all text-white/60 hover:bg-white/5 hover:text-white">
-                        <i class="bi bi-cloud-arrow-up"></i> <span>Backup Data</span>
-                    </a>
-                    <a href=""
-                    {{-- {{ route('admin.settings') }} --}}
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all text-white/60 hover:bg-white/5 hover:text-white">
-                        <i class="bi bi-sliders2"></i> <span>Pengaturan</span>
-                    </a>
-                </div>
+        <div>
+            <label class="px-4 text-[10px] font-bold text-blue-400/60 uppercase tracking-[2px] mb-2 block">System Settings</label>
+            <div class="space-y-1">
+                <a href="{{ route('admin.log.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.log.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                    <i class="bi bi-clock-history"></i> <span>Log Aktivitas</span>
+                </a>
+                <a href="{{ route('admin.pengaturan') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengaturan') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
+                    <i class="bi bi-sliders2"></i> <span>Pengaturan</span>
+                </a>
             </div>
+        </div>
         @endif
     </nav>
 
     <div class="p-4 border-t border-white/5 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <span
-                class="w-1.5 h-1.5 rounded-full {{ $authRole === 'superadmin' ? 'bg-violet-400' : 'bg-green-400' }}"></span>
+                class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
             <span class="text-[9px] text-white/40 font-bold tracking-widest uppercase">{{ $authRole }}</span>
         </div>
         <span class="text-[9px] text-white/20">V1.0</span>

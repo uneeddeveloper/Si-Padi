@@ -8,7 +8,7 @@
         <div>
             <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
                 {{-- Sesuaikan route dashboard Anda (admin atau superadmin) --}}
-                <a href="{{ route('superadmin.dashboard') }}" class="text-primary hover:underline">Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-primary hover:underline">Dashboard</a>
                 <i class="bi bi-chevron-right text-[10px]"></i>
                 <span class="text-gray-400">Pengaduan</span>
             </div>
@@ -38,7 +38,7 @@
         @foreach($stats as $s)
             <div class="bg-white p-4 rounded-radius border border-[#e2e8f0] shadow-sm flex items-center gap-4">
                 <div class="w-10 h-10 rounded-xl bg-opacity-10 flex items-center justify-center text-lg"
-                    style="background-color: {{ $s['color'] == 'primary' ? '#e8f5ee' : 'rgba(0,0,0,0.05)' }}; color: {{ $s['color'] == 'primary' ? '#1a6b3c' : $s['color'] }}">
+                    style="background-color: {{ $s['color'] == 'primary' ? '#eef3ff' : 'rgba(0,0,0,0.05)' }}; color: {{ $s['color'] == 'primary' ? '#1a56db' : $s['color'] }}">
                     <i class="bi {{ $s['icon'] }}"></i>
                 </div>
                 <div>
@@ -56,8 +56,7 @@
             class="px-6 py-4 border-b border-[#e2e8f0] flex flex-col lg:row md:flex-row md:items-center justify-between gap-4 bg-gray-50/30">
 
             {{-- Form Pencarian & Filter --}}
-            <form action="" method="GET" class="flex flex-col md:flex-row gap-3 w-full">
-                {{-- {{ route('admin.pengaduan.index') }} --}}
+            <form action="{{ route('admin.pengaduan.index') }}" method="GET" class="flex flex-col md:flex-row gap-3 w-full">
                 <div class="relative w-full md:w-64">
                     <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari tiket, pelapor..."
@@ -198,7 +197,7 @@
                                     {{-- Tombol Hapus (Super Admin Only) --}}
                                     @if(Auth::user()->role === 'superadmin')
                                         <form action="{{ route('admin.pengaduan.destroy', $item->id) }}" method="POST"
-                                            onsubmit="return confirm('Hapus pengaduan ini?')">
+                                            onsubmit="return confirm('Hapus pengaduan #{{ $item->nomor_tiket }}?')">
                                             @csrf @method('DELETE')
                                             <button type="submit"
                                                 class="w-8 h-8 flex items-center justify-center border border-gray-200 rounded-lg text-gray-400 hover:text-red-600 hover:border-red-200 hover:bg-red-50 transition-all">

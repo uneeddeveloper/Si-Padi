@@ -18,11 +18,11 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1a6b3c',
-                        'primary-dark': '#134f2d',
-                        'primary-light': '#e8f5ee',
-                        'bg-base': '#f0f4f1',
-                        'bg-sidebar': '#0f3d22',
+                        primary: '#1a56db',
+                        'primary-dark': '#1240a8',
+                        'primary-light': '#eef3ff',
+                        'bg-base': '#f0f4fc',
+                        'bg-sidebar': '#0f1f5c',
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
@@ -92,7 +92,7 @@
                     class="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-bg-base transition-all text-left">
                     <div
                         class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs
-                        {{ $authRole === 'superadmin' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-primary to-[#2d9b5a]' }}">
+                        {{ $authRole === 'superadmin' ? 'bg-gradient-to-br from-violet-600 to-indigo-600' : 'bg-gradient-to-br from-primary to-[#2d7af0]' }}">
                         {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                     </div>
                     <div class="hidden lg:block leading-tight">
@@ -109,12 +109,11 @@
                         <div class="text-xs font-bold">{{ Auth::user()->name }}</div>
                         <div class="text-[10px] text-gray-500">{{ Auth::user()->email }}</div>
                     </div>
-                    <a href="" {{-- {{ route('admin.profile') }} --}}
+                    <a href="#"
                         class="flex items-center gap-2 px-3 py-2 text-xs text-gray-600 hover:bg-bg-base rounded-md transition-all">
                         <i class="bi bi-person"></i> Profil Saya
                     </a>
-                    <form action="" method="POST">
-                        {{-- {{ route('logout') }} --}}
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
                             class="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-600 hover:bg-red-50 rounded-md transition-all">

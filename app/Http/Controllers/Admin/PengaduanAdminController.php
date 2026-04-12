@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PengaduanAdminController extends Controller
 {
@@ -69,7 +71,14 @@ class PengaduanAdminController extends Controller
 
         $pengaduan->save();
 
-        // 4. Kembali ke halaman sebelumnya dengan pesan sukses
+        ActivityLog::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'Update Status',
+            'target'     => 'Tiket #' . $pengaduan->nomor_tiket,
+            'keterangan' => 'Status diubah menjadi ' . $request->status,
+            'ip_address' => $request->ip(),
+        ]);
+
         return back()->with('success', 'Status Tiket #' . $pengaduan->nomor_tiket . ' berhasil diupdate menjadi ' . $request->status);
     }
 
@@ -79,7 +88,16 @@ class PengaduanAdminController extends Controller
     public function destroy($id)
     {
         $pengaduan = Pengaduan::findOrFail($id);
+        $tiket = $pengaduan->nomor_tiket;
         $pengaduan->delete();
+
+        ActivityLog::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'Hapus Pengaduan',
+            'target'     => 'Tiket #' . $tiket,
+            'keterangan' => 'Pengaduan dengan nomor tiket ' . $tiket . ' dihapus.',
+            'ip_address' => request()->ip(),
+        ]);
 
         return redirect()->route('admin.pengaduan.index')->with('success', 'Data pengaduan telah dihapus.');
     }
