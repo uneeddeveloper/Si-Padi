@@ -30,7 +30,6 @@
                         $dbStats = [
                             ['label' => 'Pengaduan', 'val' => $stats['total_pengaduan'], 'icon' => 'bi-megaphone', 'color' => 'text-primary', 'bg' => 'bg-primary-light'],
                             ['label' => 'Pengguna', 'val' => $stats['total_users'], 'icon' => 'bi-people', 'color' => 'text-violet-600', 'bg' => 'bg-violet-50'],
-                            ['label' => 'Instansi', 'val' => $stats['total_instansi'], 'icon' => 'bi-building', 'color' => 'text-blue-600', 'bg' => 'bg-blue-50'],
                             ['label' => 'Log Aktivitas', 'val' => $stats['total_logs'], 'icon' => 'bi-clock-history', 'color' => 'text-amber-600', 'bg' => 'bg-amber-50'],
                         ];
                     @endphp
@@ -110,7 +109,6 @@
                         $quickLinks = [
                             ['label' => 'Semua Pengaduan', 'route' => 'admin.pengaduan.index', 'icon' => 'bi-megaphone', 'color' => 'text-primary'],
                             ['label' => 'Manajemen Akun',  'route' => 'admin.users.index',     'icon' => 'bi-people',    'color' => 'text-violet-600'],
-                            ['label' => 'Data Instansi',   'route' => 'admin.instansi.index',  'icon' => 'bi-building',  'color' => 'text-blue-600'],
                             ['label' => 'Kategori',        'route' => 'admin.kategori.index',  'icon' => 'bi-tags',      'color' => 'text-green-600'],
                             ['label' => 'Log Aktivitas',   'route' => 'admin.log.index',       'icon' => 'bi-clock-history', 'color' => 'text-amber-600'],
                         ];

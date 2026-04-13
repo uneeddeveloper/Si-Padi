@@ -45,11 +45,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/users/{user}/toggle', [UserAdminController::class, 'toggleActive'])->name('users.toggle');
     Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->name('users.destroy');
 
-    // Data Instansi
-    Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.index');
-    Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
-    Route::put('/instansi/{instansi}', [InstansiController::class, 'update'])->name('instansi.update');
-    Route::delete('/instansi/{instansi}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
 
     // Kategori
     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');

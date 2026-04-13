@@ -15,7 +15,6 @@ class PengaturanController extends Controller
         $stats = [
             'total_pengaduan' => Pengaduan::count(),
             'total_users'     => User::count(),
-            'total_instansi'  => Instansi::count(),
             'total_logs'      => ActivityLog::count(),
         ];
 
