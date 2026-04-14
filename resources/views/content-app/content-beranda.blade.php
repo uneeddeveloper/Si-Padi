@@ -62,12 +62,12 @@
             <div class="grid grid-cols-2 gap-4 animate-fade-up-d2">
                 @php
                 $stats = [
-                ['icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', 'num' => '1,248', 'label' => 'Total Pengaduan'],
-                ['icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0', 'num' => '98%', 'label' => 'Terselesaikan'],
-                ['icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0', 'num' => '<24j', 'label'=> 'Rata-rata Respons'],
-                    ['icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', 'num' => '6 RT', 'label' => 'Wilayah Terlayani'],
-                    ];
-                    @endphp
+                ['icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', 'num' => number_format($totalPengaduan), 'label' => 'Total Pengaduan'],
+                ['icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0', 'num' => $persenSelesai . '%', 'label' => 'Terselesaikan'],
+                ['icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0', 'num' => '<24j', 'label' => 'Rata-rata Respons'],
+                ['icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', 'num' => $wilayahTerlayani . ' RT', 'label' => 'Wilayah Terlayani'],
+                ];
+                @endphp
                     @foreach($stats as $i => $stat)
                     <div
                         class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 {{ $i === 0 ? 'col-span-2 sm:col-span-1' : '' }}">
