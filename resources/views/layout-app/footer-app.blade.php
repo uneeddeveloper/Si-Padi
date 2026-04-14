@@ -15,8 +15,8 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="font-extrabold text-white text-lg leading-none">SPW</div>
-                        <div class="text-slate-500 text-xs">Sistem Pengaduan Warga</div>
+                        <div class="font-extrabold text-white text-lg leading-none">Si-Padi</div>
+                        <div class="text-slate-500 text-xs">Sistem Informasi Pengaduan Masyarakat Desa</div>
                     </div>
                 </div>
                 <p class="text-sm leading-relaxed text-slate-400 max-w-xs">
@@ -45,10 +45,9 @@
             <div>
                 <h4 class="text-white font-semibold text-sm mb-4">Layanan</h4>
                 <ul class="space-y-2.5 text-sm">
-                    <li><a href="#pengaduan" class="hover:text-white transition-colors">Buat Pengaduan</a></li>
-                    <li><a href="#lacak" class="hover:text-white transition-colors">Lacak Pengaduan</a></li>
-                    <li><a href="#tentang" class="hover:text-white transition-colors">Tentang SPW</a></li>
-                    <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="{{ route('pengaduan') }}" class="hover:text-white transition-colors">Buat Pengaduan</a></li>
+                    <li><a href="{{ route('tentang') }}" class="hover:text-white transition-colors">Tentang Si-Padi</a></li>
+                    <li><a href="{{ route('riwayat') }}" class="hover:text-white transition-colors">Riwayat Pengaduan</a></li>
                 </ul>
             </div>
 
