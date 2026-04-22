@@ -17,10 +17,11 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <button
-                class="px-4 py-2 bg-white border border-[#e2e8f0] rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 transition-all flex items-center gap-2 shadow-sm">
+            <a href="{{ route('admin.pengaduan.exportPdf', array_filter(['status' => request('status'), 'kategori' => request('kategori'), 'search' => request('search')])) }}"
+               target="_blank"
+               class="px-4 py-2 bg-white border border-[#e2e8f0] rounded-lg text-xs font-bold text-gray-600 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all flex items-center gap-2 shadow-sm">
                 <i class="bi bi-file-earmark-pdf"></i> Ekspor PDF
-            </button>
+            </a>
         </div>
     </div>
 

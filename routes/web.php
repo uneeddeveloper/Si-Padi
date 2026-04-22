@@ -35,6 +35,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // Pengaduan
     Route::get('/pengaduan', [PengaduanAdminController::class, 'index'])->name('pengaduan.index');
+    Route::get('/pengaduan/export/pdf', [PengaduanAdminController::class, 'exportPdf'])->name('pengaduan.exportPdf');
     Route::get('/pengaduan/{id}', [PengaduanAdminController::class, 'show'])->name('pengaduan.show');
     Route::patch('/pengaduan/{id}/update-status', [PengaduanAdminController::class, 'updateStatus'])->name('pengaduan.updateStatus');
     Route::delete('/pengaduan/{id}', [PengaduanAdminController::class, 'destroy'])->name('pengaduan.destroy');

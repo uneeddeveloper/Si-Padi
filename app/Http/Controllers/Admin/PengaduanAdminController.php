@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Pengaduan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,6 +81,61 @@ class PengaduanAdminController extends Controller
         ]);
 
         return back()->with('success', 'Status Tiket #' . $pengaduan->nomor_tiket . ' berhasil diupdate menjadi ' . $request->status);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = Pengaduan::latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_pelapor', 'like', "%$search%")
+                    ->orWhere('judul', 'like', "%$search%")
+                    ->orWhere('nomor_tiket', 'like', "%$search%");
+            });
+        }
+
+        $pengaduans = $query->get();
+
+        $stats = [
+            'total'    => Pengaduan::count(),
+            'menunggu' => Pengaduan::where('status', 'Menunggu')->count(),
+            'diproses' => Pengaduan::where('status', 'Diproses')->count(),
+            'selesai'  => Pengaduan::where('status', 'Selesai')->count(),
+            'ditolak'  => Pengaduan::where('status', 'Ditolak')->count(),
+        ];
+
+        $byKategori = Pengaduan::selectRaw('kategori, count(*) as jumlah')
+            ->groupBy('kategori')
+            ->orderByDesc('jumlah')
+            ->pluck('jumlah', 'kategori');
+
+        $byUrgensi = Pengaduan::selectRaw('urgensi, count(*) as jumlah')
+            ->groupBy('urgensi')
+            ->orderByDesc('jumlah')
+            ->pluck('jumlah', 'urgensi');
+
+        $pdf = Pdf::loadView('content-admin.pdf-summary', compact(
+            'pengaduans',
+            'stats',
+            'byKategori',
+            'byUrgensi',
+        ) + [
+            'filterStatus'   => $request->status,
+            'filterKategori' => $request->kategori,
+            'filterSearch'   => $request->search,
+        ])->setPaper('a4', 'landscape');
+
+        $filename = 'laporan-pengaduan-' . now()->format('Ymd-His') . '.pdf';
+
+        return $pdf->download($filename);
     }
 
     /**
