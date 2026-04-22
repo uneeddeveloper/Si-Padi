@@ -14,7 +14,7 @@
                 </div>
                 <div class="leading-tight">
                     <span class="font-extrabold text-lg text-white tracking-tight leading-none block"
-                        id="nav-brand">si-padi</span>
+                        id="nav-brand">Si-Padi</span>
                     <span class="text-[10px] text-white/60 leading-none" id="nav-sub">Sistem Informasi Pengaduan
                         Masyarakat Desa</span>
                 </div>
@@ -37,12 +37,8 @@
             {{-- CTA --}}
             <div class="hidden md:flex items-center gap-3">
                 <a href="{{ route('login') }}"
-                    class="px-4 py-2 text-sm font-semibold text-white/90 hover:text-white transition-colors">
-                    Masuk
-                </a>
-                <a href="#pengaduan"
                     class="px-4 py-2 bg-white text-brand-700 text-sm font-bold rounded-xl hover:bg-brand-50 transition-all shadow-sm">
-                    Laporkan Sekarang
+                    Masuk
                 </a>
             </div>
 
@@ -59,21 +55,22 @@
     {{-- Mobile Menu --}}
     <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-brand-800/95 backdrop-blur-md">
         <div class="px-4 py-3 space-y-1">
-            <a href="#beranda"
+            <a href="{{ route('beranda') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Beranda</a>
-            <a href="#pengaduan"
+            <a href="{{ route('pengaduan') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Buat
                 Pengaduan</a>
-            <a href="#lacak"
+            <a href="{{ route('pengaduan') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Lacak
+                Pengaduan</a>
+            <a href="{{ route('riwayat') }}"
+                class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Riwayat
                 Pengaduan</a>
             <a href="{{ route('tentang') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Tentang</a>
             <div class="pt-2 border-t border-white/10 flex gap-2">
                 <a href="{{ route('login') }}"
                     class="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white/80 hover:bg-white/10 transition">Masuk</a>
-                <a href="#pengaduan"
-                    class="flex-1 text-center px-3 py-2 bg-white text-brand-700 rounded-lg text-sm font-bold hover:bg-brand-50 transition">Lapor</a>
             </div>
         </div>
     </div>
