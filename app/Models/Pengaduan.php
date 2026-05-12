@@ -32,4 +32,14 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tanggapan()
+    {
+        return $this->hasMany(TanggapanPengaduan::class);
+    }
+
+    public function rating()
+    {
+        return $this->hasOne(RatingPengaduan::class);
+    }
 }

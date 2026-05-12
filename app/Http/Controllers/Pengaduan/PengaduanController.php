@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pengaduan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengaduan;
+use App\Models\RatingPengaduan;
+use App\Models\TanggapanPengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -138,10 +140,14 @@ class PengaduanController extends Controller
                 'tiket.regex' => 'Format nomor tiket tidak valid. Gunakan format PDU-YYYY-XXX.',
             ]);
 
-            $pengaduan = Pengaduan::where(
-                'nomor_tiket',
-                strtoupper(trim($request->tiket))
-            )->first();
+            $pengaduan = Pengaduan::with([
+                    'tanggapan' => function ($q) {
+                        $q->where('is_internal', false)->orderBy('created_at');
+                    },
+                    'rating',
+                ])
+                ->where('nomor_tiket', strtoupper(trim($request->tiket)))
+                ->first();
 
             // Tandai agar view bisa membedakan "belum cari" vs "tidak ditemukan"
             if (!$pengaduan) {
@@ -150,5 +156,58 @@ class PengaduanController extends Controller
         }
 
         return view('content-app.content-pengaduan', compact('pengaduan', 'tiketNotFound'));
+    }
+
+    public function storeTanggapanPublik(Request $request)
+    {
+        $data = $request->validate([
+            'nomor_tiket'   => ['required', 'string'],
+            'nama_pengirim' => ['required', 'string', 'max:100'],
+            'isi'           => ['required', 'string', 'min:3'],
+        ]);
+
+        $pengaduan = Pengaduan::where('nomor_tiket', strtoupper(trim($data['nomor_tiket'])))->firstOrFail();
+
+        TanggapanPengaduan::create([
+            'pengaduan_id'  => $pengaduan->id,
+            'user_id'       => null,
+            'pengirim'      => 'Pelapor',
+            'nama_pengirim' => $data['nama_pengirim'],
+            'isi'           => $data['isi'],
+            'is_internal'   => false,
+        ]);
+
+        return redirect()
+            ->route('pengaduan.lacak', ['tiket' => $pengaduan->nomor_tiket])
+            ->with('tanggapan_sukses', true);
+    }
+
+    public function storeRatingPublik(Request $request)
+    {
+        $data = $request->validate([
+            'nomor_tiket'  => ['required', 'string'],
+            'nama_pelapor' => ['required', 'string', 'max:100'],
+            'bintang'      => ['required', 'integer', 'between:1,5'],
+            'ulasan'       => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $pengaduan = Pengaduan::where('nomor_tiket', strtoupper(trim($data['nomor_tiket'])))->firstOrFail();
+
+        if ($pengaduan->status !== 'Selesai') {
+            return back()->withErrors(['rating' => 'Rating hanya bisa diberikan setelah pengaduan berstatus Selesai.']);
+        }
+
+        RatingPengaduan::updateOrCreate(
+            ['pengaduan_id' => $pengaduan->id],
+            [
+                'nama_pelapor' => $data['nama_pelapor'],
+                'bintang'      => $data['bintang'],
+                'ulasan'       => $data['ulasan'] ?? null,
+            ]
+        );
+
+        return redirect()
+            ->route('pengaduan.lacak', ['tiket' => $pengaduan->nomor_tiket])
+            ->with('rating_sukses', true);
     }
 }

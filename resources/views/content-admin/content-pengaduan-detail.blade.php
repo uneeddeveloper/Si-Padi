@@ -143,6 +143,61 @@
                 </div>
             </div>
 
+            {{-- Thread Tanggapan --}}
+            <div class="bg-white rounded-radius border border-gray-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                    <h3 class="font-bold text-gray-700 uppercase text-[10px] tracking-widest flex items-center gap-2">
+                        <i class="bi bi-chat-left-dots-fill text-primary"></i> Diskusi & Tanggapan
+                    </h3>
+                    <span class="text-[10px] text-gray-400 font-bold">{{ $pengaduan->tanggapan->count() }} pesan</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    @forelse($pengaduan->tanggapan as $t)
+                        <div class="flex gap-3 {{ $t->pengirim === 'Petugas' ? '' : 'flex-row-reverse' }}">
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-[11px] shrink-0
+                                {{ $t->pengirim === 'Petugas' ? 'bg-gradient-to-br from-primary to-[#2d7af0]' : 'bg-gradient-to-br from-amber-400 to-amber-600' }}">
+                                {{ strtoupper(substr($t->nama_pengirim, 0, 2)) }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1 {{ $t->pengirim === 'Petugas' ? '' : 'flex-row-reverse' }}">
+                                    <span class="text-xs font-bold text-gray-700">{{ $t->nama_pengirim }}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase {{ $t->pengirim === 'Petugas' ? 'bg-primary-light text-primary' : 'bg-amber-50 text-amber-700' }}">{{ $t->pengirim }}</span>
+                                    @if($t->is_internal)
+                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-red-50 text-red-600">Internal</span>
+                                    @endif
+                                    <span class="text-[10px] text-gray-400">{{ $t->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="px-4 py-2.5 rounded-lg text-sm leading-relaxed whitespace-pre-line
+                                    {{ $t->pengirim === 'Petugas' ? 'bg-primary-light text-gray-700' : 'bg-amber-50 text-gray-700' }}">
+                                    {{ $t->isi }}
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-center text-gray-400 text-xs py-4">Belum ada tanggapan. Tulis balasan pertama di bawah.</p>
+                    @endforelse
+                </div>
+
+                {{-- Form Tanggapan --}}
+                <form action="{{ route('admin.pengaduan.tanggapan.store', $pengaduan->id) }}" method="POST"
+                    class="px-6 pb-6 border-t border-gray-100 pt-4 space-y-3">
+                    @csrf
+                    <textarea name="isi" rows="3" required minlength="3"
+                        placeholder="Tulis tanggapan resmi Anda..."
+                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-all resize-none text-sm"></textarea>
+                    <div class="flex items-center justify-between gap-3 flex-wrap">
+                        <label class="flex items-center gap-2 text-xs text-gray-600">
+                            <input type="checkbox" name="is_internal" value="1" class="w-4 h-4 text-primary rounded">
+                            Catatan internal (tidak ditampilkan ke pelapor)
+                        </label>
+                        <button type="submit"
+                            class="px-5 py-2 bg-primary text-white font-bold rounded-lg hover:bg-primary-dark shadow-sm shadow-primary/20 transition-all text-xs flex items-center gap-2">
+                            <i class="bi bi-send"></i> Kirim Tanggapan
+                        </button>
+                    </div>
+                </form>
+            </div>
+
             {{-- Data Pelapor --}}
             <div class="bg-white rounded-radius border border-gray-200 shadow-sm p-6">
                 <h3 class="font-bold text-gray-700 uppercase text-[10px] tracking-widest border-b pb-3 mb-4 flex items-center gap-2">
@@ -203,6 +258,29 @@
                     </button>
                 </form>
             </div>
+
+            {{-- Rating dari Pelapor --}}
+            @if($pengaduan->rating)
+                <div class="bg-white rounded-radius border border-amber-100 shadow-sm p-5">
+                    <h3 class="font-bold text-amber-600 text-xs uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="bi bi-star-fill"></i> Rating dari Pelapor
+                    </h3>
+                    <div class="flex items-center gap-1 mb-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="bi {{ $i <= $pengaduan->rating->bintang ? 'bi-star-fill text-amber-400' : 'bi-star text-gray-300' }} text-xl"></i>
+                        @endfor
+                        <span class="ml-2 font-bold text-gray-700 text-sm">{{ $pengaduan->rating->bintang }}/5</span>
+                    </div>
+                    @if($pengaduan->rating->ulasan)
+                        <div class="bg-amber-50 rounded-lg p-3 text-xs text-gray-700 italic leading-relaxed mb-2">
+                            "{{ $pengaduan->rating->ulasan }}"
+                        </div>
+                    @endif
+                    <div class="text-[10px] text-gray-400 flex items-center gap-1">
+                        <i class="bi bi-person"></i> {{ $pengaduan->rating->nama_pelapor }} · {{ $pengaduan->rating->created_at->diffForHumans() }}
+                    </div>
+                </div>
+            @endif
 
             {{-- Info Ringkas --}}
             <div class="bg-white rounded-radius border border-gray-200 shadow-sm p-5 space-y-3">

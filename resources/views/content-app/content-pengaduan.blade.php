@@ -395,6 +395,153 @@
                     <h3 class="font-bold text-slate-800 mb-3 text-sm">Detail Pengaduan</h3>
                     <p class="text-sm text-slate-600 leading-relaxed">{{ $pengaduan->deskripsi }}</p>
                 </div>
+
+                {{-- Thread Tanggapan --}}
+                <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 text-sm flex items-center justify-between">
+                        <span>Diskusi & Tanggapan</span>
+                        <span class="text-[10px] text-slate-400 font-medium">{{ $pengaduan->tanggapan->count() }} pesan</span>
+                    </h3>
+
+                    @if(session('tanggapan_sukses'))
+                        <div class="mb-4 px-3 py-2 bg-green-50 border border-green-200 text-green-700 rounded-lg text-xs">
+                            ✓ Tanggapan Anda berhasil terkirim.
+                        </div>
+                    @endif
+
+                    <div class="space-y-3 mb-4">
+                        @forelse($pengaduan->tanggapan as $t)
+                            <div class="flex gap-3 {{ $t->pengirim === 'Petugas' ? '' : 'flex-row-reverse' }}">
+                                <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-[11px] shrink-0
+                                    {{ $t->pengirim === 'Petugas' ? 'bg-brand-600' : 'bg-amber-500' }}">
+                                    {{ strtoupper(substr($t->nama_pengirim, 0, 2)) }}
+                                </div>
+                                <div class="flex-1 min-w-0 max-w-[85%]">
+                                    <div class="flex items-center gap-2 mb-1 {{ $t->pengirim === 'Petugas' ? '' : 'flex-row-reverse' }}">
+                                        <span class="text-xs font-bold text-slate-700">{{ $t->nama_pengirim }}</span>
+                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase {{ $t->pengirim === 'Petugas' ? 'bg-brand-50 text-brand-700' : 'bg-amber-50 text-amber-700' }}">{{ $t->pengirim }}</span>
+                                        <span class="text-[10px] text-slate-400">{{ $t->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <div class="px-4 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-line
+                                        {{ $t->pengirim === 'Petugas' ? 'bg-brand-50 text-slate-700' : 'bg-amber-50 text-slate-700' }}">
+                                        {{ $t->isi }}
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-center text-slate-400 text-xs py-4">Belum ada tanggapan dari petugas.</p>
+                        @endforelse
+                    </div>
+
+                    {{-- Form balas --}}
+                    @if($pengaduan->status !== 'Ditolak')
+                        <form action="{{ route('pengaduan.lacak.tanggapan') }}" method="POST" class="border-t border-slate-100 pt-4 space-y-3">
+                            @csrf
+                            <input type="hidden" name="nomor_tiket" value="{{ $pengaduan->nomor_tiket }}">
+                            <input type="text" name="nama_pengirim" value="{{ old('nama_pengirim', $pengaduan->nama_pelapor) }}" required
+                                placeholder="Nama Anda"
+                                class="form-input w-full px-4 py-2.5 border-[1.5px] border-slate-200 rounded-xl text-sm">
+                            <textarea name="isi" rows="3" required minlength="3" placeholder="Tulis balasan / pertanyaan Anda..."
+                                class="form-input w-full px-4 py-2.5 border-[1.5px] border-slate-200 rounded-xl text-sm resize-none"></textarea>
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="px-5 py-2 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors text-xs flex items-center gap-2">
+                                    Kirim Balasan
+                                </button>
+                            </div>
+                        </form>
+                    @endif
+                </div>
+
+                {{-- Rating Section (hanya jika Selesai) --}}
+                @if($pengaduan->status === 'Selesai')
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-5 shadow-sm">
+                        @if($pengaduan->rating)
+                            <h3 class="font-bold text-slate-800 mb-3 text-sm flex items-center gap-2">
+                                <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                Penilaian Anda
+                            </h3>
+                            <div class="flex items-center gap-1 mb-2">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-6 h-6 {{ $i <= $pengaduan->rating->bintang ? 'text-amber-400' : 'text-slate-200' }}" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                    </svg>
+                                @endfor
+                                <span class="ml-2 font-bold text-slate-700 text-sm">{{ $pengaduan->rating->bintang }}/5</span>
+                            </div>
+                            @if($pengaduan->rating->ulasan)
+                                <p class="text-sm text-slate-600 italic leading-relaxed">"{{ $pengaduan->rating->ulasan }}"</p>
+                            @endif
+                            <p class="text-[11px] text-slate-400 mt-3">Terima kasih atas penilaian Anda.</p>
+                        @else
+                            <h3 class="font-bold text-slate-800 mb-2 text-sm">Beri Penilaian</h3>
+                            <p class="text-xs text-slate-500 mb-4">Bantu kami meningkatkan layanan dengan menilai penanganan pengaduan ini.</p>
+
+                            @if($errors->any())
+                                <div class="mb-3 px-3 py-2 bg-red-50 border border-red-200 text-red-600 rounded-lg text-xs">
+                                    @foreach($errors->all() as $e) <div>• {{ $e }}</div> @endforeach
+                                </div>
+                            @endif
+
+                            <form action="{{ route('pengaduan.lacak.rating') }}" method="POST" class="space-y-3">
+                                @csrf
+                                <input type="hidden" name="nomor_tiket" value="{{ $pengaduan->nomor_tiket }}">
+                                <input type="hidden" name="bintang" id="rating-value" value="5" required>
+
+                                <div class="flex items-center gap-1" id="star-picker">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <button type="button" data-val="{{ $i }}" class="star-btn p-1 transition-transform hover:scale-110">
+                                            <svg class="w-8 h-8 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                        </button>
+                                    @endfor
+                                    <span id="rating-label" class="ml-2 text-sm font-bold text-slate-700">5/5</span>
+                                </div>
+
+                                <input type="text" name="nama_pelapor" required maxlength="100"
+                                    value="{{ old('nama_pelapor', $pengaduan->nama_pelapor) }}"
+                                    placeholder="Nama Anda"
+                                    class="form-input w-full px-4 py-2.5 border-[1.5px] border-slate-200 rounded-xl text-sm">
+
+                                <textarea name="ulasan" rows="3" maxlength="1000"
+                                    placeholder="Ulasan (opsional)"
+                                    class="form-input w-full px-4 py-2.5 border-[1.5px] border-slate-200 rounded-xl text-sm resize-none">{{ old('ulasan') }}</textarea>
+
+                                <button type="submit"
+                                    class="w-full py-2.5 bg-amber-500 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors text-sm">
+                                    Kirim Penilaian
+                                </button>
+                            </form>
+
+                            @push('scripts')
+                            <script>
+                                (function() {
+                                    const buttons = document.querySelectorAll('.star-btn');
+                                    const input   = document.getElementById('rating-value');
+                                    const label   = document.getElementById('rating-label');
+                                    function paint(v) {
+                                        buttons.forEach((b, i) => {
+                                            b.querySelector('svg').classList.toggle('text-amber-400', i < v);
+                                            b.querySelector('svg').classList.toggle('text-slate-200', i >= v);
+                                        });
+                                        input.value = v;
+                                        label.textContent = v + '/5';
+                                    }
+                                    buttons.forEach(b => b.addEventListener('click', () => paint(parseInt(b.dataset.val))));
+                                    paint(5);
+                                })();
+                            </script>
+                            @endpush
+                        @endif
+                    </div>
+
+                    @if(session('rating_sukses'))
+                        <div class="px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm flex items-center gap-2">
+                            ✓ Penilaian Anda telah tersimpan. Terima kasih!
+                        </div>
+                    @endif
+                @endif
             </div>
 
             @elseif(request('tiket') && !isset($pengaduan))

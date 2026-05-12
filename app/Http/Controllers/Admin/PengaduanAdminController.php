@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Pengaduan;
+use App\Models\TanggapanPengaduan;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +48,39 @@ class PengaduanAdminController extends Controller
 
     // detail pengaduan
     public function show($id) {
-        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan = Pengaduan::with(['tanggapan' => function ($q) {
+            $q->orderBy('created_at');
+        }, 'rating'])->findOrFail($id);
+
         return view('content-admin.content-pengaduan-detail', compact('pengaduan'));
+    }
+
+    public function storeTanggapan(Request $request, $id)
+    {
+        $request->validate([
+            'isi' => ['required', 'string', 'min:3'],
+        ]);
+
+        $pengaduan = Pengaduan::findOrFail($id);
+
+        TanggapanPengaduan::create([
+            'pengaduan_id'  => $pengaduan->id,
+            'user_id'       => Auth::id(),
+            'pengirim'      => 'Petugas',
+            'nama_pengirim' => Auth::user()->name,
+            'isi'           => $request->isi,
+            'is_internal'   => $request->boolean('is_internal'),
+        ]);
+
+        ActivityLog::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'Balas Pengaduan',
+            'target'     => 'Tiket #' . $pengaduan->nomor_tiket,
+            'keterangan' => 'Menambah tanggapan baru.',
+            'ip_address' => $request->ip(),
+        ]);
+
+        return back()->with('success', 'Tanggapan berhasil dikirim.');
     }
 
     public function updateStatus(Request $request, $id)
