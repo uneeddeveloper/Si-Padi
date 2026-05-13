@@ -2,17 +2,18 @@
 
 use App\Http\Controllers\Admin\BerandaAdminController;
 use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\InstansiController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\PengaduanAdminController;
 use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\PengumumanController;
+use App\Http\Controllers\Admin\StrukturOrganisasiController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Beranda\berandaUserController;
 use App\Http\Controllers\Beranda\FaqPublikController;
 use App\Http\Controllers\Beranda\PengumumanPublikController;
+use App\Http\Controllers\Beranda\ProfilDesaController;
 use App\Http\Controllers\Beranda\RiwayatController;
 use App\Http\Controllers\Beranda\TentangController;
 use App\Http\Controllers\Pengaduan\PengaduanController;
@@ -54,11 +55,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Kategori
     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 
-    // Instansi
-    Route::get('/instansi', [InstansiController::class, 'index'])->name('instansi.index');
-    Route::post('/instansi', [InstansiController::class, 'store'])->name('instansi.store');
-    Route::patch('/instansi/{instansi}', [InstansiController::class, 'update'])->name('instansi.update');
-    Route::delete('/instansi/{instansi}', [InstansiController::class, 'destroy'])->name('instansi.destroy');
+    // Struktur Organisasi Kantor Desa
+    Route::get('/struktur', [StrukturOrganisasiController::class, 'index'])->name('struktur.index');
+    Route::post('/struktur', [StrukturOrganisasiController::class, 'store'])->name('struktur.store');
+    Route::patch('/struktur/{struktur}', [StrukturOrganisasiController::class, 'update'])->name('struktur.update');
+    Route::delete('/struktur/{struktur}', [StrukturOrganisasiController::class, 'destroy'])->name('struktur.destroy');
 
     // Pengumuman
     Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
@@ -93,6 +94,7 @@ Route::get('/lacak', [PengaduanController::class, 'lacak'])->name('pengaduan.lac
 Route::post('/lacak/tanggapan', [PengaduanController::class, 'storeTanggapanPublik'])->name('pengaduan.lacak.tanggapan');
 Route::post('/lacak/rating', [PengaduanController::class, 'storeRatingPublik'])->name('pengaduan.lacak.rating');
 Route::get('/tentang', [TentangController::class, 'index'])->name('tentang');
+Route::get('/profil-desa', [ProfilDesaController::class, 'index'])->name('profil-desa');
 Route::get('/riwayat-pengaduan', [RiwayatController::class, 'index'])->name('riwayat');
 
 // Pengumuman publik

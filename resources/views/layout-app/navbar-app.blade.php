@@ -24,6 +24,9 @@
             <nav class="hidden md:flex items-center gap-1">
                 <a href="{{ route('beranda') }}"
                     class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">Beranda</a>
+                <a href="{{ route('profil-desa') }}"
+                    class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">Profil
+                    Desa</a>
                 <a href="{{ route('pengaduan') }}"
                     class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">Buat
                     Pengaduan </a>
@@ -60,6 +63,9 @@
         <div class="px-4 py-3 space-y-1">
             <a href="{{ route('beranda') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Beranda</a>
+            <a href="{{ route('profil-desa') }}"
+                class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Profil
+                Desa</a>
             <a href="{{ route('pengaduan') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Buat
                 Pengaduan</a>

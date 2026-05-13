@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pengaduan;
 use App\Models\User;
-use App\Models\Instansi;
 use App\Models\ActivityLog;
 
 class PengaturanController extends Controller

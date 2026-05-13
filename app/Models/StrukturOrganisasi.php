@@ -4,22 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Instansi extends Model
+class StrukturOrganisasi extends Model
 {
-    protected $table = 'instansis';
+    protected $table = 'struktur_organisasis';
 
     protected $fillable = [
+        'jabatan',
         'nama',
-        'kode',
-        'penanggung_jawab',
-        'email',
-        'nomor_telepon',
-        'alamat',
-        'deskripsi',
+        'nip',
+        'urutan',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'urutan'    => 'integer',
     ];
 }
