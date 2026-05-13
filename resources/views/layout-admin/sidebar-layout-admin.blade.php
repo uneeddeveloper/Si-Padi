@@ -91,10 +91,6 @@
                     class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.pengumuman.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
                     <i class="bi bi-megaphone"></i> <span>Pengumuman</span>
                 </a>
-                <a href="{{ route('admin.faq.index') }}"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all {{ request()->routeIs('admin.faq.*') ? 'bg-primary/20 text-blue-300 font-bold border-l-4 border-blue-400' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
-                    <i class="bi bi-question-circle"></i> <span>FAQ</span>
-                </a>
             </div>
         </div>
 

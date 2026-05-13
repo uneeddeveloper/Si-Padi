@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\BerandaAdminController;
-use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\PengaduanAdminController;
@@ -11,7 +10,6 @@ use App\Http\Controllers\Admin\StrukturOrganisasiController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Beranda\berandaUserController;
-use App\Http\Controllers\Beranda\FaqPublikController;
 use App\Http\Controllers\Beranda\PengumumanPublikController;
 use App\Http\Controllers\Beranda\ProfilDesaController;
 use App\Http\Controllers\Beranda\RiwayatController;
@@ -67,12 +65,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
-    // FAQ
-    Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
-    Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
-    Route::patch('/faq/{faq}', [FaqController::class, 'update'])->name('faq.update');
-    Route::delete('/faq/{faq}', [FaqController::class, 'destroy'])->name('faq.destroy');
-
     // Log Aktivitas (superadmin only)
     Route::get('/log', [LogController::class, 'index'])->name('log.index');
 
@@ -101,5 +93,5 @@ Route::get('/riwayat-pengaduan', [RiwayatController::class, 'index'])->name('riw
 Route::get('/pengumuman', [PengumumanPublikController::class, 'index'])->name('pengumuman.index');
 Route::get('/pengumuman/{slug}', [PengumumanPublikController::class, 'show'])->name('pengumuman.show');
 
-// FAQ publik
-Route::get('/faq', [FaqPublikController::class, 'index'])->name('faq.index');
+// FAQ publik (hardcoded)
+Route::view('/faq', 'content-app.content-faq')->name('faq.index');

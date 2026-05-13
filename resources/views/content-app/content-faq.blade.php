@@ -2,6 +2,37 @@
 
 @section('title', 'FAQ — Si-Padi')
 
+@php
+    $faqs = [
+        'Umum' => [
+            [
+                'pertanyaan' => 'Apa itu SiPadi?',
+                'jawaban'    => 'SiPadi (Sistem Pengaduan Daring) adalah layanan pengaduan online untuk masyarakat agar dapat melaporkan permasalahan pelayanan publik.',
+            ],
+        ],
+        'Pengaduan' => [
+            [
+                'pertanyaan' => 'Bagaimana cara membuat laporan pengaduan?',
+                'jawaban'    => 'Klik menu Pengaduan, isi formulir dengan benar (kategori, judul, deskripsi, foto, dan koordinat), lalu klik Kirim. Anda akan mendapatkan nomor tiket.',
+            ],
+            [
+                'pertanyaan' => 'Berapa lama pengaduan akan ditindaklanjuti?',
+                'jawaban'    => 'Pengaduan biasanya direspons dalam 1x24 jam hari kerja. Lama penyelesaian tergantung kategori dan kompleksitas masalah.',
+            ],
+            [
+                'pertanyaan' => 'Bagaimana cara melacak status laporan saya?',
+                'jawaban'    => 'Buka menu Lacak Pengaduan lalu masukkan nomor tiket yang Anda terima saat membuat laporan.',
+            ],
+        ],
+        'Privasi' => [
+            [
+                'pertanyaan' => 'Apakah identitas pelapor dirahasiakan?',
+                'jawaban'    => 'Ya. Data pribadi pelapor hanya diakses oleh petugas yang berwenang dan tidak dipublikasikan.',
+            ],
+        ],
+    ];
+@endphp
+
 @section('content')
 
     <section class="bg-brand-600 pt-32 pb-20 relative overflow-hidden">
@@ -19,32 +50,28 @@
 
     <section class="bg-slate-50 py-16">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            @if($faqs->isEmpty())
-                <p class="text-center text-slate-500 py-20">Belum ada pertanyaan yang tersedia.</p>
-            @else
-                @foreach($faqs as $kategori => $items)
-                    <div class="mb-10">
-                        <h2 class="text-xs font-bold uppercase tracking-widest text-brand-600 mb-4">{{ $kategori }}</h2>
-                        <div class="space-y-3">
-                            @foreach($items as $f)
-                                <details class="bg-white rounded-2xl border border-slate-100 shadow-sm group">
-                                    <summary class="cursor-pointer list-none px-5 py-4 flex items-start justify-between gap-4">
-                                        <span class="font-bold text-slate-900 text-sm sm:text-base">{{ $f->pertanyaan }}</span>
-                                        <span class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 group-open:rotate-45 transition-transform">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                                            </svg>
-                                        </span>
-                                    </summary>
-                                    <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 whitespace-pre-line">
-                                        {{ $f->jawaban }}
-                                    </div>
-                                </details>
-                            @endforeach
-                        </div>
+            @foreach($faqs as $kategori => $items)
+                <div class="mb-10">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-600 mb-4">{{ $kategori }}</h2>
+                    <div class="space-y-3">
+                        @foreach($items as $f)
+                            <details class="bg-white rounded-2xl border border-slate-100 shadow-sm group">
+                                <summary class="cursor-pointer list-none px-5 py-4 flex items-start justify-between gap-4">
+                                    <span class="font-bold text-slate-900 text-sm sm:text-base">{{ $f['pertanyaan'] }}</span>
+                                    <span class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 group-open:rotate-45 transition-transform">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3 whitespace-pre-line">
+                                    {{ $f['jawaban'] }}
+                                </div>
+                            </details>
+                        @endforeach
                     </div>
-                @endforeach
-            @endif
+                </div>
+            @endforeach
 
             <div class="mt-12 text-center bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
                 <h3 class="font-extrabold text-slate-900 text-lg mb-2">Tidak menemukan jawaban?</h3>
