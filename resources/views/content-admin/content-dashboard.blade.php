@@ -237,16 +237,18 @@
                 </div>
             </div>
 
-            {{-- Info Masyarakat --}}
+            {{-- Info Admin --}}
             <div class="bg-white rounded-radius border border-[#e2e8f0] shadow-sm p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-gray-700 flex items-center gap-2">
-                        <i class="bi bi-people text-primary"></i> Masyarakat
+                        <i class="bi bi-shield-check text-primary"></i> Admin
                     </h3>
                     <span class="text-xs font-grotesk font-bold text-primary">{{ number_format($totalUser) }} Akun</span>
                 </div>
-                <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Total masyarakat yang telah terdaftar di sistem SI PADI untuk menyampaikan aspirasi.</p>
-                <a href="{{ route('admin.users.index') }}" class="block text-center py-2 bg-bg-base text-primary text-[11px] font-bold rounded-lg hover:bg-primary-light transition-all">Kelola Pengguna</a>
+                <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Total akun administrator & superadmin yang memiliki akses ke panel SI PADI.</p>
+                @if($isSuperAdmin)
+                    <a href="{{ route('admin.users.index') }}" class="block text-center py-2 bg-bg-base text-primary text-[11px] font-bold rounded-lg hover:bg-primary-light transition-all">Kelola Admin</a>
+                @endif
             </div>
         </div>
 

@@ -32,14 +32,13 @@ class PengumumanController extends Controller
     {
         $data = $this->validateInput($request);
 
+        $data['status']  = $this->resolveStatus($request);
         $data['slug']    = $this->uniqueSlug($data['judul']);
         $data['user_id'] = Auth::id();
         $data['gambar']  = $request->hasFile('gambar')
             ? $request->file('gambar')->store('pengumuman', 'public')
             : null;
-        $data['tanggal_terbit'] = ($data['status'] ?? 'Draft') === 'Publish'
-            ? ($data['tanggal_terbit'] ?? now())
-            : null;
+        $data['tanggal_terbit'] = $data['status'] === 'Publish' ? now() : null;
 
         $p = Pengumuman::create($data);
 
@@ -56,7 +55,9 @@ class PengumumanController extends Controller
 
     public function update(Request $request, Pengumuman $pengumuman)
     {
-        $data = $this->validateInput($request, $pengumuman->id);
+        $data = $this->validateInput($request);
+
+        $data['status'] = $this->resolveStatus($request);
 
         if ($data['judul'] !== $pengumuman->judul) {
             $data['slug'] = $this->uniqueSlug($data['judul'], $pengumuman->id);
@@ -65,9 +66,11 @@ class PengumumanController extends Controller
         if ($request->hasFile('gambar')) {
             if ($pengumuman->gambar) Storage::disk('public')->delete($pengumuman->gambar);
             $data['gambar'] = $request->file('gambar')->store('pengumuman', 'public');
+        } else {
+            unset($data['gambar']);
         }
 
-        $data['tanggal_terbit'] = ($data['status'] ?? 'Draft') === 'Publish'
+        $data['tanggal_terbit'] = $data['status'] === 'Publish'
             ? ($pengumuman->tanggal_terbit ?? now())
             : null;
 
@@ -101,15 +104,22 @@ class PengumumanController extends Controller
         return back()->with('success', 'Pengumuman berhasil dihapus.');
     }
 
-    private function validateInput(Request $request, ?int $ignoreId = null): array
+    private function validateInput(Request $request): array
     {
         return $request->validate([
             'judul'     => ['required', 'string', 'max:200'],
             'ringkasan' => ['nullable', 'string', 'max:500'],
             'isi'       => ['required', 'string'],
             'gambar'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'status'    => ['required', 'in:Draft,Publish,Arsip'],
         ]);
+    }
+
+    private function resolveStatus(Request $request): string
+    {
+        if ($request->boolean('arsip')) {
+            return 'Arsip';
+        }
+        return $request->boolean('publish') ? 'Publish' : 'Draft';
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string

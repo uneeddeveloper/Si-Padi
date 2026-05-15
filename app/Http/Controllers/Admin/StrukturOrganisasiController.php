@@ -38,7 +38,7 @@ class StrukturOrganisasiController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        $data['is_active'] = $request->boolean('is_active', true);
+        $data['is_active'] = $request->boolean('is_active');
         $data['urutan']    = $data['urutan'] ?? 0;
 
         $item = StrukturOrganisasi::create($data);
@@ -64,7 +64,7 @@ class StrukturOrganisasiController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
-        $data['is_active'] = $request->boolean('is_active', true);
+        $data['is_active'] = $request->boolean('is_active');
         $data['urutan']    = $data['urutan'] ?? 0;
 
         $struktur->update($data);

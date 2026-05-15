@@ -159,13 +159,21 @@
                             <p id="gambar-info" class="text-[10px] text-gray-400 mt-1 hidden"></p>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-gray-500 mb-1">Status *</label>
-                            <select name="status" id="f-status" required
-                                class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:border-primary outline-none">
-                                <option value="Draft">Draft</option>
-                                <option value="Publish">Publish</option>
-                                <option value="Arsip">Arsip</option>
-                            </select>
+                            <label class="block text-[11px] font-bold text-gray-500 mb-1">Status Publikasi</label>
+                            <div class="flex items-center gap-3 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50/40">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="hidden" name="publish" value="0">
+                                    <input type="checkbox" name="publish" id="f-publish" value="1"
+                                        class="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-700 font-medium">Terbitkan ke publik</span>
+                                </label>
+                                <span class="ml-auto text-[10px] text-gray-400">Hilangkan centang untuk Draft</span>
+                            </div>
+                            <label class="mt-2 inline-flex items-center gap-2 text-[11px] text-gray-500 cursor-pointer">
+                                <input type="checkbox" name="arsip" id="f-arsip" value="1"
+                                    class="w-3.5 h-3.5 text-amber-600 rounded border-gray-300 focus:ring-amber-500">
+                                Arsipkan (tidak ditampilkan & dikunci dari edit publik)
+                            </label>
                         </div>
                     </div>
 
@@ -188,6 +196,8 @@
         form.action = "{{ route('admin.pengumuman.store') }}";
         document.getElementById('form-method').value = 'POST';
         form.reset();
+        document.getElementById('f-publish').checked = false;
+        document.getElementById('f-arsip').checked = false;
         document.getElementById('gambar-info').classList.add('hidden');
         modal.classList.remove('hidden');
     }
@@ -199,7 +209,8 @@
         document.getElementById('f-judul').value     = p.judul;
         document.getElementById('f-ringkasan').value = p.ringkasan ?? '';
         document.getElementById('f-isi').value       = p.isi;
-        document.getElementById('f-status').value    = p.status;
+        document.getElementById('f-publish').checked = (p.status === 'Publish');
+        document.getElementById('f-arsip').checked   = (p.status === 'Arsip');
         const info = document.getElementById('gambar-info');
         if (p.gambar) { info.textContent = 'Gambar saat ini: ' + p.gambar + ' (unggah baru untuk mengganti)'; info.classList.remove('hidden'); }
         else { info.classList.add('hidden'); }

@@ -163,6 +163,7 @@
                     </div>
 
                     <label class="flex items-center gap-2 text-sm text-gray-600">
+                        <input type="hidden" name="is_active" value="0">
                         <input type="checkbox" name="is_active" id="f-active" value="1" checked
                             class="w-4 h-4 text-primary rounded">
                         Tampilkan di halaman Profil Desa

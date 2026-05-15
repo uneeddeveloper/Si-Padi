@@ -44,12 +44,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/pengaduan/{id}/tanggapan', [PengaduanAdminController::class, 'storeTanggapan'])->name('pengaduan.tanggapan.store');
     Route::delete('/pengaduan/{id}', [PengaduanAdminController::class, 'destroy'])->name('pengaduan.destroy');
 
-    // Masyarakat (Manajemen Akun Admin)
-    Route::get('/users', [UserAdminController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserAdminController::class, 'store'])->name('users.store');
-    Route::patch('/users/{user}/toggle', [UserAdminController::class, 'toggleActive'])->name('users.toggle');
-    Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->name('users.destroy');
-
     // Kategori
     Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 
@@ -65,11 +59,20 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/pengumuman/{pengumuman}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('/pengumuman/{pengumuman}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
-    // Log Aktivitas (superadmin only)
-    Route::get('/log', [LogController::class, 'index'])->name('log.index');
+    // --- Superadmin only ---
+    Route::middleware('superadmin')->group(function () {
+        // Manajemen Akun Admin
+        Route::get('/users', [UserAdminController::class, 'index'])->name('users.index');
+        Route::post('/users', [UserAdminController::class, 'store'])->name('users.store');
+        Route::patch('/users/{user}/toggle', [UserAdminController::class, 'toggleActive'])->name('users.toggle');
+        Route::delete('/users/{user}', [UserAdminController::class, 'destroy'])->name('users.destroy');
 
-    // Pengaturan (superadmin only)
-    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
+        // Log Aktivitas
+        Route::get('/log', [LogController::class, 'index'])->name('log.index');
+
+        // Pengaturan
+        Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
+    });
 });
 
 // Alias lama agar tidak 404 jika masih ada referensi luar
