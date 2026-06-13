@@ -1,13 +1,13 @@
 @extends('layout-app.main-app')
 
-@section('title', 'FAQ — Si-Padi')
+@section('title', 'FAQ — SiMPeDa')
 
 @php
     $faqs = [
         'Umum' => [
             [
-                'pertanyaan' => 'Apa itu SiPadi?',
-                'jawaban'    => 'SiPadi (Sistem Pengaduan Daring) adalah layanan pengaduan online untuk masyarakat agar dapat melaporkan permasalahan pelayanan publik.',
+                'pertanyaan' => 'Apa itu SiMPeDa?',
+                'jawaban'    => 'SiMPeDa (Sistem Manajemen Pengaduan Desa) adalah layanan pengaduan online untuk masyarakat agar dapat melaporkan permasalahan pelayanan publik.',
             ],
         ],
         'Pengaduan' => [
@@ -44,7 +44,7 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
             <span class="text-xs font-bold tracking-widest uppercase text-brand-100 mb-2 block">Bantuan</span>
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Pertanyaan Sering Ditanyakan</h1>
-            <p class="text-brand-100 max-w-2xl mx-auto text-lg">Jawaban singkat seputar layanan Si-Padi.</p>
+            <p class="text-brand-100 max-w-2xl mx-auto text-lg">Jawaban singkat seputar layanan SiMPeDa.</p>
         </div>
     </section>
 

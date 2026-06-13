@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Si-Padi — Sistem Informasi Pengaduan Masyarakat Desa')
+@section('title', 'SiMPeDa — Sistem Manajemen Pengaduan Desa')
 
 @section('content')
 
@@ -32,7 +32,7 @@
     <section id="tentang" class="bg-slate-50 py-20 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14">
-                <span class="text-xs font-bold tracking-widest uppercase text-brand-600 mb-2 block">Kenapa Si-Padi?</span>
+                <span class="text-xs font-bold tracking-widest uppercase text-brand-600 mb-2 block">Kenapa SiMPeDa?</span>
                 <h2 class="font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
                     Pengaduan yang benar-benar ditindak
                 </h2>

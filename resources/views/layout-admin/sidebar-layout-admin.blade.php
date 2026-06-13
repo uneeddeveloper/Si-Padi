@@ -12,7 +12,7 @@
             </svg>
         </div>
         <div class="leading-none">
-            <div class="font-grotesk font-bold text-white text-base tracking-tight">SI PADI</div>
+            <div class="font-grotesk font-bold text-white text-base tracking-tight">SiMPeDa</div>
             <div class="text-[10px] text-white/40 uppercase tracking-wider mt-0.5">Pengaduan</div>
         </div>
     </div>

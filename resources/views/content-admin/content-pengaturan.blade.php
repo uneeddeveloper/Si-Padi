@@ -12,7 +12,7 @@
             <span class="text-gray-400">Pengaturan</span>
         </div>
         <h1 class="font-grotesk text-2xl font-bold text-gray-800 tracking-tight">Pengaturan Sistem</h1>
-        <p class="text-sm text-gray-500 mt-1">Informasi dan statistik sistem SI PADI.</p>
+        <p class="text-sm text-gray-500 mt-1">Informasi dan statistik sistem SiMPeDa.</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -51,7 +51,7 @@
                 <div class="space-y-3 text-sm">
                     @php
                         $appInfos = [
-                            ['label' => 'Nama Aplikasi',   'val' => 'SI PADI — Sistem Informasi Pengaduan Masyarakat'],
+                            ['label' => 'Nama Aplikasi',   'val' => 'SiMPeDa — Sistem Manajemen Pengaduan Desa'],
                             ['label' => 'Versi',           'val' => 'v1.0.0'],
                             ['label' => 'Framework',       'val' => 'Laravel ' . app()->version()],
                             ['label' => 'PHP Version',     'val' => phpversion()],

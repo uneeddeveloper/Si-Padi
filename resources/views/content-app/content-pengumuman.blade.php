@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Pengumuman — Si-Padi')
+@section('title', 'Pengumuman — SiMPeDa')
 
 @section('content')
 

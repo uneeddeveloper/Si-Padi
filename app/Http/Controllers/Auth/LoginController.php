@@ -29,13 +29,12 @@ class LoginController extends Controller
      */
     public function login(Request $request): RedirectResponse
     {
-        // 1. Validasi input
+        // 1. Validasi input (masyarakat pakai NIK, petugas pakai email)
         $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'login' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
         ], [
-            'email.required' => 'Alamat email wajib diisi.',
-            'email.email' => 'Format alamat email tidak valid.',
+            'login.required' => 'Email atau NIK wajib diisi.',
             'password.required' => 'Kata sandi wajib diisi.',
             'password.min' => 'Kata sandi minimal 6 karakter.',
         ]);
@@ -43,15 +42,18 @@ class LoginController extends Controller
         // 2. Cek rate limiting
         $this->ensureIsNotRateLimited($request);
 
-        // 3. Coba autentikasi
-        $credentials = $request->only('email', 'password');
+        // 3. Tentukan kredensial: 16 digit angka dianggap NIK, selain itu email
+        $loginInput = trim($request->input('login'));
+        $field = (ctype_digit($loginInput) && strlen($loginInput) === 16) ? 'nik' : 'email';
+
+        $credentials = [$field => $loginInput, 'password' => $request->input('password')];
         $remember = $request->boolean('remember');
 
         if (!Auth::attempt($credentials, $remember)) {
             RateLimiter::hit($this->throttleKey($request));
 
             throw ValidationException::withMessages([
-                'email' => 'Email atau kata sandi yang Anda masukkan salah.',
+                'login' => 'Email/NIK atau kata sandi yang Anda masukkan salah.',
             ]);
         }
 
@@ -67,7 +69,7 @@ class LoginController extends Controller
             $request->session()->regenerateToken();
 
             throw ValidationException::withMessages([
-                'email' => 'Akun Anda dinonaktifkan. Hubungi administrator.',
+                'login' => 'Akun Anda dinonaktifkan. Hubungi administrator.',
             ]);
         }
 
@@ -99,7 +101,8 @@ class LoginController extends Controller
         return match ($role) {
             'superadmin' => route('superadmin.dashboard'),
             'admin' => route('admin.dashboard'),
-            default => route('dashboard'),
+            'masyarakat' => route('warga.dashboard'),
+            default => route('beranda'),
         };
     }
 
@@ -115,17 +118,17 @@ class LoginController extends Controller
         $seconds = RateLimiter::availableIn($this->throttleKey($request));
 
         throw ValidationException::withMessages([
-            'email' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
+            'login' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
         ]);
     }
 
     /**
-     * Buat throttle key unik per email + IP.
+     * Buat throttle key unik per identitas (email/NIK) + IP.
      */
     protected function throttleKey(Request $request): string
     {
         return Str::transliterate(
-            Str::lower($request->input('email')) . '|' . $request->ip()
+            Str::lower($request->input('login')) . '|' . $request->ip()
         );
     }
 }

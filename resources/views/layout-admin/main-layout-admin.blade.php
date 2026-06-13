@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') — SI PADI</title>
+    <title>@yield('title', 'Dashboard') — SiMPeDa</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -130,8 +130,8 @@
 
         <footer
             class="p-4 lg:px-7 bg-white border-t border-[#edf2f7] flex flex-wrap justify-between items-center text-[11px] text-gray-500 gap-2">
-            <span>&copy; {{ date('Y') }} <strong class="text-primary">SI PADI</strong> — Sistem Informasi Pengaduan
-                Masyarakat</span>
+            <span>&copy; {{ date('Y') }} <strong class="text-primary">SiMPeDa</strong> — Sistem Manajemen
+                Pengaduan Desa</span>
             <span class="opacity-50 tracking-widest">V1.0.0</span>
         </footer>
     </div>

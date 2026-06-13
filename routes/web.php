@@ -9,7 +9,9 @@ use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\StrukturOrganisasiController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Beranda\berandaUserController;
+use App\Http\Controllers\Beranda\DashboardWargaController;
 use App\Http\Controllers\Beranda\PengumumanPublikController;
 use App\Http\Controllers\Beranda\ProfilDesaController;
 use App\Http\Controllers\Beranda\RiwayatController;
@@ -24,14 +26,18 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
+
+    // Pendaftaran akun masyarakat
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// --- Admin Panel (auth required) ---
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+// --- Admin Panel (auth + role petugas required) ---
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [BerandaAdminController::class, 'index'])->name('dashboard');
@@ -83,8 +89,16 @@ Route::get('/dashboard', function () {
 
 // --- Publik (beranda masyarakat) ---
 Route::get('/beranda', [berandaUserController::class, 'index'])->name('beranda');
-Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan');
-Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+
+// Buat pengaduan: wajib login sebagai masyarakat (pengaduan terhubung ke akun)
+Route::middleware('auth')->group(function () {
+    // Dashboard warga: aksi cepat + riwayat pengaduan milik akun
+    Route::get('/dashboard-warga', [DashboardWargaController::class, 'index'])->name('warga.dashboard');
+
+    Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan');
+    Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+});
+
 Route::get('/lacak', [PengaduanController::class, 'lacak'])->name('pengaduan.lacak');
 Route::post('/lacak/tanggapan', [PengaduanController::class, 'storeTanggapanPublik'])->name('pengaduan.lacak.tanggapan');
 Route::post('/lacak/rating', [PengaduanController::class, 'storeRatingPublik'])->name('pengaduan.lacak.rating');

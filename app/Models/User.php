@@ -19,11 +19,22 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nik',
         'email',
+        'nomor_hp',
+        'rt_rw',
         'password',
         'role',
         'is_active',
     ];
+
+    /**
+     * Apakah user ini adalah warga/masyarakat (bukan petugas).
+     */
+    public function isMasyarakat(): bool
+    {
+        return $this->role === 'masyarakat';
+    }
 
     /**
      * The attributes that should be hidden for serialization.

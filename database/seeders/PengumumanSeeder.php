@@ -15,9 +15,9 @@ class PengumumanSeeder extends Seeder
 
         $data = [
             [
-                'judul' => 'Selamat Datang di SiPadi',
-                'ringkasan' => 'Sistem Pengaduan Daring untuk warga yang lebih responsif.',
-                'isi' => 'SiPadi memudahkan masyarakat menyampaikan pengaduan terkait pelayanan publik secara online. Sampaikan keluhan Anda kapan saja, di mana saja.',
+                'judul' => 'Selamat Datang di SiMPeDa',
+                'ringkasan' => 'Sistem Manajemen Pengaduan Desa untuk warga yang lebih responsif.',
+                'isi' => 'SiMPeDa memudahkan masyarakat menyampaikan pengaduan terkait pelayanan publik secara online. Sampaikan keluhan Anda kapan saja, di mana saja.',
                 'status' => 'Publish',
                 'tanggal_terbit' => now()->subDays(7),
             ],

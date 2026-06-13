@@ -14,9 +14,9 @@
                 </div>
                 <div class="leading-tight">
                     <span class="font-extrabold text-lg text-white tracking-tight leading-none block"
-                        id="nav-brand">Si-Padi</span>
-                    <span class="text-[10px] text-white/60 leading-none" id="nav-sub">Sistem Informasi Pengaduan
-                        Masyarakat Desa</span>
+                        id="nav-brand">SiMPeDa</span>
+                    <span class="text-[10px] text-white/60 leading-none" id="nav-sub">Sistem Manajemen
+                        Pengaduan Desa</span>
                 </div>
             </a>
 
@@ -42,10 +42,38 @@
             </nav>
             {{-- CTA --}}
             <div class="hidden md:flex items-center gap-3">
-                <a href="{{ route('login') }}"
-                    class="px-4 py-2 bg-white text-brand-700 text-sm font-bold rounded-xl hover:bg-brand-50 transition-all shadow-sm">
-                    Masuk
-                </a>
+                @auth
+                    @if (in_array(auth()->user()->role, ['admin', 'superadmin']))
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+                            Dashboard
+                        </a>
+                    @elseif (auth()->user()->role === 'masyarakat')
+                        <a href="{{ route('warga.dashboard') }}"
+                            class="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+                            Dashboard
+                        </a>
+                    @endif
+                    <span class="text-sm font-medium text-white/90 max-w-[160px] truncate" title="{{ auth()->user()->name }}">
+                        Halo, {{ auth()->user()->name }}
+                    </span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="px-4 py-2 bg-white text-brand-700 text-sm font-bold rounded-xl hover:bg-brand-50 transition-all shadow-sm">
+                            Keluar
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('register') }}"
+                        class="px-4 py-2 text-sm font-semibold text-white/90 hover:text-white hover:bg-white/10 rounded-xl transition-all">
+                        Daftar
+                    </a>
+                    <a href="{{ route('login') }}"
+                        class="px-4 py-2 bg-white text-brand-700 text-sm font-bold rounded-xl hover:bg-brand-50 transition-all shadow-sm">
+                        Masuk
+                    </a>
+                @endauth
             </div>
 
             {{-- Mobile Menu Button --}}
@@ -63,13 +91,19 @@
         <div class="px-4 py-3 space-y-1">
             <a href="{{ route('beranda') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Beranda</a>
+            @auth
+                @if (auth()->user()->role === 'masyarakat')
+                    <a href="{{ route('warga.dashboard') }}"
+                        class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Dashboard</a>
+                @endif
+            @endauth
             <a href="{{ route('profil-desa') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Profil
                 Desa</a>
             <a href="{{ route('pengaduan') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Buat
                 Pengaduan</a>
-            <a href="{{ route('pengaduan') }}"
+            <a href="{{ route('pengaduan.lacak') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Lacak
                 Pengaduan</a>
             <a href="{{ route('pengumuman.index') }}"
@@ -82,8 +116,19 @@
             <a href="{{ route('tentang') }}"
                 class="block px-3 py-2 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition">Tentang</a>
             <div class="pt-2 border-t border-white/10 flex gap-2">
-                <a href="{{ route('login') }}"
-                    class="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white/80 hover:bg-white/10 transition">Masuk</a>
+                @auth
+                    <span class="flex-1 px-3 py-2 text-sm font-medium text-white/90 truncate">Halo, {{ auth()->user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-center px-3 py-2 rounded-lg text-sm font-semibold bg-white text-brand-700 hover:bg-brand-50 transition">Keluar</button>
+                    </form>
+                @else
+                    <a href="{{ route('register') }}"
+                        class="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white/80 hover:bg-white/10 transition">Daftar</a>
+                    <a href="{{ route('login') }}"
+                        class="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold bg-white text-brand-700 hover:bg-brand-50 transition">Masuk</a>
+                @endauth
             </div>
         </div>
     </div>

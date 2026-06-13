@@ -75,7 +75,7 @@
     {{-- Header --}}
     <div class="anim-header mb-9">
         <p class="text-xs font-semibold tracking-widest uppercase text-[#1a56db] mb-2">
-            Portal Petugas &amp; Admin
+            Portal Masyarakat &amp; Petugas
         </p>
         {{-- Turun dari font-extrabold ke font-bold --}}
         <h2 class="font-extrabold text-[30px] text-slate-900 leading-tight tracking-tight mb-2">
@@ -91,24 +91,24 @@
         <form id="loginForm" method="POST" action="{{ route('login') }}" novalidate>
             @csrf
 
-            {{-- Email --}}
+            {{-- Email atau NIK --}}
             <div class="mb-5">
-                <label for="email" class="block text-[13px] font-semibold text-slate-800 mb-2">
-                    Alamat Email
+                <label for="login" class="block text-[13px] font-semibold text-slate-800 mb-2">
+                    Email atau NIK
                 </label>
                 <div class="field-wrapper relative">
-                    <input type="email" id="email" name="email" placeholder="nama@instansi.go.id" value="{{ old('email') }}"
-                        autocomplete="email" autofocus class="field-input w-full h-12 pl-11 pr-4 border-[1.5px] rounded-xl text-sm text-slate-900 bg-slate-50 transition-colors duration-200
-                                {{ $errors->has('email')
+                    <input type="text" id="login" name="login" placeholder="Email petugas atau NIK warga" value="{{ old('login') }}"
+                        autocomplete="username" autofocus class="field-input w-full h-12 pl-11 pr-4 border-[1.5px] rounded-xl text-sm text-slate-900 bg-slate-50 transition-colors duration-200
+                                {{ $errors->has('login')
         ? 'border-red-400 bg-red-50 shadow-[0_0_0_3px_rgba(220,38,38,.08)]'
         : 'border-slate-200' }}">
                     <svg class="field-icon pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-slate-400 transition-colors duration-200"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </div>
-                @error('email')
+                @error('login')
                     <div class="flex items-center gap-1.5 mt-1.5 text-xs text-red-600">
                         <svg class="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10" />
@@ -184,7 +184,7 @@
                         disabled:opacity-65 disabled:cursor-not-allowed disabled:translate-y-0">
                 <span class="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></span>
                 <div class="spinner"></div>
-                <span class="btn-label">Masuk ke Dashboard</span>
+                <span class="btn-label">Masuk</span>
                 <svg class="btn-label w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -196,9 +196,9 @@
 
     {{-- Footer --}}
     <div class="anim-footer text-center mt-6 text-[13px] text-slate-500">
-        Ada kendala akses?
-        <a href="mailto:admin@spw.go.id" class="text-[#1a56db] font-semibold hover:underline">
-            Hubungi administrator
+        Belum punya akun?
+        <a href="{{ route('register') }}" class="text-[#1a56db] font-semibold hover:underline">
+            Daftar sebagai masyarakat
         </a>
     </div>
 

@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Riwayat Pengaduan — Si-Padi')
+@section('title', 'Riwayat Pengaduan — SiMPeDa')
 
 @push('styles')
     <style>
@@ -64,10 +64,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Arsip Laporan Si-Padi
+                    Arsip Laporan SiMPeDa
                 </div>
                 <h1 class="font-extrabold text-3xl sm:text-4xl text-white tracking-tight">Riwayat Pengaduan</h1>
-                <p class="text-white/65 text-sm mt-2">Daftar rekaman seluruh pengaduan yang telah masuk ke sistem Si-Padi.
+                <p class="text-white/65 text-sm mt-2">Daftar rekaman seluruh pengaduan yang telah masuk ke sistem SiMPeDa.
                 </p>
             </div>
         </div>

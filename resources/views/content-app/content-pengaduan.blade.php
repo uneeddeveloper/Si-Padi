@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Si-Padi — Sistem Informasi Pengaduan Masyarakat Desa')
+@section('title', 'SiMPeDa — Sistem Manajemen Pengaduan Desa')
 
 @section('content')
 
@@ -117,7 +117,7 @@
                         </label>
                         <input type="text" id="nama_pelapor" name="nama_pelapor"
                             placeholder="Nama lengkap Anda"
-                            value="{{ old('nama_pelapor') }}"
+                            value="{{ old('nama_pelapor', auth()->user()?->name) }}"
                             class="form-input w-full h-11 px-4 border-[1.5px] border-slate-200 rounded-xl text-sm bg-slate-50 transition-all
                                 {{ $errors->has('nama_pelapor') ? 'border-red-400 bg-red-50' : '' }}">
                         @error('nama_pelapor') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -128,7 +128,7 @@
                         </label>
                         <input type="tel" id="nomor_hp" name="nomor_hp"
                             placeholder="08xx-xxxx-xxxx"
-                            value="{{ old('nomor_hp') }}"
+                            value="{{ old('nomor_hp', auth()->user()?->nomor_hp) }}"
                             class="form-input w-full h-11 px-4 border-[1.5px] border-slate-200 rounded-xl text-sm bg-slate-50 transition-all
                                 {{ $errors->has('nomor_hp') ? 'border-red-400 bg-red-50' : '' }}">
                         @error('nomor_hp') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -141,7 +141,7 @@
                     </label>
                     <input type="text" id="rt_rw" name="rt_rw"
                         placeholder="Contoh: 001/002"
-                        value="{{ old('rt_rw') }}"
+                        value="{{ old('rt_rw', auth()->user()?->rt_rw) }}"
                         class="form-input w-full h-11 px-4 border-[1.5px] border-slate-200 rounded-xl text-sm bg-slate-50 transition-all max-w-[200px]
                             {{ $errors->has('rt_rw') ? 'border-red-400 bg-red-50' : '' }}">
                     @error('rt_rw') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror

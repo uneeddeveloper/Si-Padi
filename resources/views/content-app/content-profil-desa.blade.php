@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Profil Desa — Si-Padi')
+@section('title', 'Profil Desa — SiMPeDa')
 
 @section('content')
 
@@ -49,7 +49,7 @@
                 <p class="relative text-xl lg:text-2xl text-slate-800 font-semibold leading-snug mb-6">
                     &ldquo;Desa yang maju lahir dari warga yang peduli dan pemerintah yang
                     <span class="text-brand-700">mendengar</span>.
-                    Bersama Si-Padi, suara Anda menjadi langkah nyata pembangunan.&rdquo;
+                    Bersama SiMPeDa, suara Anda menjadi langkah nyata pembangunan.&rdquo;
                 </p>
 
                 <div class="relative flex items-center gap-3">

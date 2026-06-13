@@ -9,6 +9,7 @@ use App\Models\TanggapanPengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PengaduanController extends Controller
@@ -98,8 +99,9 @@ class PengaduanController extends Controller
             // 2b. Generate nomor tiket di dalam transaction
             $nomorTiket = $this->generateNomorTiket();
 
-            // 2c. Simpan ke database
+            // 2c. Simpan ke database (terhubung ke akun yang login)
             return Pengaduan::create([
+                'user_id'          => Auth::id(),
                 'nomor_tiket'      => $nomorTiket,
                 'kategori'         => $validated['kategori'],
                 'nama_pelapor'     => $validated['nama_pelapor'],

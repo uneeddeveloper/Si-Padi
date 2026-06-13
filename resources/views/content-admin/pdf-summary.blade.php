@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Pengaduan - SI PADI</title>
+    <title>Laporan Pengaduan - SiMPeDa</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -272,8 +272,8 @@
     <table class="header-inner">
         <tr>
             <td class="header-left">
-                <div class="brand-name">SI PADI</div>
-                <div class="brand-sub">Sistem Informasi Pengaduan dan Aspirasi Desa Integrasi</div>
+                <div class="brand-name">SiMPeDa</div>
+                <div class="brand-sub">Sistem Manajemen Pengaduan Desa</div>
             </td>
             <td class="header-right">
                 <div class="doc-label">Laporan Resmi</div>
@@ -436,12 +436,12 @@
     <table class="footer-table">
         <tr>
             <td>
-                <strong>SI PADI</strong> &mdash; Sistem Informasi Pengaduan dan Aspirasi Desa Integrasi<br>
+                <strong>SiMPeDa</strong> &mdash; Sistem Manajemen Pengaduan Desa<br>
                 Dokumen digenerate otomatis &mdash; bukan merupakan dokumen resmi yang disahkan tanda tangan.
             </td>
             <td class="footer-right">
                 Jumlah data: <strong>{{ $pengaduans->count() }} pengaduan</strong><br>
-                &copy; {{ date('Y') }} SI PADI. Hak cipta dilindungi.
+                &copy; {{ date('Y') }} SiMPeDa. Hak cipta dilindungi.
             </td>
         </tr>
     </table>

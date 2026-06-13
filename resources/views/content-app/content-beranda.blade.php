@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', 'Si-Padi — Sistem Informasi Pengaduan Masyarakat Desa')
+@section('title', 'SiMPeDa — Sistem Manajemen Pengaduan Desa')
 
 @section('content')
 

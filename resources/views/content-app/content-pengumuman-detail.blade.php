@@ -1,6 +1,6 @@
 @extends('layout-app.main-app')
 
-@section('title', $pengumuman->judul . ' — Si-Padi')
+@section('title', $pengumuman->judul . ' — SiMPeDa')
 
 @section('content')
 

@@ -14,7 +14,7 @@
                 {{ $isSuperAdmin ? '👑' : '🛡️' }} Selamat datang, {{ $user->name }}!
             </h2>
             <p class="text-sm text-white/70 max-w-lg mb-5">
-                {{ $isSuperAdmin ? 'Anda memiliki kendali penuh atas sistem informasi pengaduan masyarakat SI PADI.' : 'Pantau dan kelola pengaduan masyarakat dari dashboard administrator.' }}
+                {{ $isSuperAdmin ? 'Anda memiliki kendali penuh atas sistem manajemen pengaduan desa SiMPeDa.' : 'Pantau dan kelola pengaduan masyarakat dari dashboard administrator.' }}
             </p>
             <div class="flex gap-3">
                 <a href="{{ route('admin.pengaduan.index') }}" class="px-4 py-2 bg-white/20 hover:bg-white/30 border border-white/20 rounded-lg text-xs font-bold transition-all flex items-center gap-2">
@@ -245,7 +245,7 @@
                     </h3>
                     <span class="text-xs font-grotesk font-bold text-primary">{{ number_format($totalUser) }} Akun</span>
                 </div>
-                <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Total akun administrator & superadmin yang memiliki akses ke panel SI PADI.</p>
+                <p class="text-[11px] text-gray-500 leading-relaxed mb-4">Total akun administrator & superadmin yang memiliki akses ke panel SiMPeDa.</p>
                 @if($isSuperAdmin)
                     <a href="{{ route('admin.users.index') }}" class="block text-center py-2 bg-bg-base text-primary text-[11px] font-bold rounded-lg hover:bg-primary-light transition-all">Kelola Admin</a>
                 @endif
